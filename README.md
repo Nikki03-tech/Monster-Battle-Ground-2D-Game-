@@ -1,117 +1,138 @@
-Monster Battleground:
+# Monster Battleground
 
-Monster Battleground is a 2D real-time arena combat game developed using JavaScript (ES6) and HTML5 Canvas. The project demonstrates core game development principles such as game loops, entity-based architecture, collision detection, and performance-oriented rendering.
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?logo=javascript&logoColor=black)
+![HTML5](https://img.shields.io/badge/HTML5-Canvas-E34F26?logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
+![Status](https://img.shields.io/badge/status-learning%20project-blue)
 
-The player controls a character within a bounded battleground and must survive against progressively challenging waves of monsters. The game emphasizes responsiveness, modular design, and clean separation of responsibilities across game components.
+A 2D side-scrolling shooter game built with vanilla JavaScript and the HTML5 Canvas API, wrapped in a custom landing page, signup and login screens, and a start menu.
 
-Gameplay Overview:
+This is my **first project**. The core game engine follows a YouTube tutorial (see [Credits](#credits)), and I designed and built the pages around it myself.
 
-Arena-based combat with continuous enemy spawning
+**Live demo:** [add your GitHub Pages link here]
 
-Player movement using keyboard input
+---
 
-Projectile-based attack system
+## Screenshots
 
-Enemy AI with directional movement toward the player
+| Landing page | Signup / Login |
+| :---: | :---: |
+| ![Landing page](screenshots/landing.png) | ![Signup and login](screenshots/login.png) |
 
-Wave-based difficulty scaling
+| Gameplay | Win screen |
+| :---: | :---: |
+| ![Gameplay](screenshots/gameplay.png) | ![Win screen](screenshots/win.png) |
 
-Score tracking and power-up mechanics
+---
 
-System Architecture:
+## Features
 
-The game follows a component-driven architecture, where each entity encapsulates its own state and behavior.
+**Game**
+- Real-time 2D shooter with a `requestAnimationFrame` game loop
+- Player movement and a projectile shooting system
+- Multiple enemy types with sprite animation
+- Collision detection between the player, projectiles and enemies
+- Score, countdown timer and win / lose screens
+- Parallax scrolling background layers
+- Particle effects (gears, smoke, fire explosions)
 
-Core Components
+**Pages I built**
+- Landing page with an About Game section and a "Play Now" button
+- Signup and login forms
+- Welcome / start menu with Start and Exit buttons
+- On-screen Up, Down and Shoot controls
 
-Game Loop
+> Remove any line above that is not in your code.
 
-Implemented using requestAnimationFrame
+---
 
-Handles rendering, updates, and frame synchronization
+## Tech Stack
 
-Player Module
+| Area | Technology |
+| --- | --- |
+| Language | JavaScript (ES6+) |
+| Rendering | HTML5 Canvas API |
+| Markup and styling | HTML5, CSS3 |
+| Animation | `requestAnimationFrame` |
 
-Manages movement, shooting, health, and power-ups
+No frameworks or build tools are needed.
 
-Processes keyboard and mouse events
+---
 
-Enemy Module
+## Getting Started
 
-Spawns dynamically based on wave logic
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Nikki03-tech/Monster-Battle-Ground-2D-Game-.git
+   cd Monster-Battle-Ground-2D-Game-
+   ```
+2. Open `index.html` in your browser. For the most reliable results, use the **Live Server** extension in VS Code.
 
-Implements basic AI to track and move toward the player
+## Controls
 
-Projectile System
+| Action | Input |
+| --- | --- |
+| Move up / down | Arrow Up / Arrow Down, or the on-screen Up / Down buttons |
+| Shoot | Space bar, or the on-screen Shoot button |
 
-Handles creation, movement, and lifecycle of bullets
+> Confirm these match your code.
 
-Optimized removal of off-screen projectiles
+---
 
-Collision Engine
+## Project Structure
 
-Axis-Aligned Bounding Box (AABB) collision detection
+```
+Monster-Battle-Ground-2D-Game-/
+├── index.html        # Game page
+├── script1.js        # Game logic
+├── style.css         # Styling
+├── *.png             # Sprites and background layers
+├── screenshots/      # Images used in this README
+└── README.md
+```
 
-Resolves interactions between player, enemies, and projectiles
+Update this tree once the landing, signup and login pages are added.
 
-Power-Up System
+---
 
-Temporary stat modifications (speed, fire rate, damage)
+## What I Built vs. What Came from the Tutorial
 
-Time-based expiration handling
+| Part | Source |
+| --- | --- |
+| Game loop, player, projectiles, enemies, collisions, sprite animation, particles | Followed the tutorial |
+| Landing page, About section, signup page, login page, welcome / start menu | Designed and built by me |
+| Game art and sprites | Free asset pack provided with the tutorial |
 
-UI & HUD
+---
 
-Displays score, health, and wave information
+## Credits
 
-Rendered directly on the canvas for performance
+- **Game tutorial and art assets:** [Frank's Laboratory](https://youtu.be/EvC3ge_puQk). Thank you for a clear, beginner-friendly tutorial. All rights to the original game code and art remain with their creator.
+- **Landing-page and menu artwork:** [state where these images came from, for example an AI image generator or a stock site].
 
-Rendering Pipeline:
+---
 
-Clear canvas for each frame
+## What I Learned
 
-Update all entities (player, enemies, projectiles)
+- Building a game loop and controlling frame updates with `requestAnimationFrame`
+- Object-oriented JavaScript with classes for the player, enemies and projectiles
+- Rectangle collision detection (AABB)
+- Sprite sheet animation and parallax backgrounds
+- Designing multi-page UI flows: landing, signup, login and menus
 
-Perform collision checks
+## Roadmap
 
-Apply state changes (damage, removal, scoring)
+- [ ] Sound effects and background music
+- [ ] Pause menu and settings
+- [ ] Boss enemies
+- [ ] Mobile touch support
+- [ ] Connect signup and login to a backend for real accounts (currently front end only)
 
-Render entities and UI elements
+---
 
-The pipeline is optimized to minimize unnecessary redraws and object allocations.
+## Author
 
-Controls: Action Input Move WASD / Arrow Keys Shoot Mouse Click / Spacebar Pause P
+**Nikitha Singh Raj Purohit**
+B.Tech CS&IT student | Aspiring Software Engineer and AI Engineer
 
-Technologies Used:
-
-JavaScript (ES6+)
-
-HTML5 Canvas API
-
-CSS3 (UI styling)
-
-requestAnimationFrame for smooth rendering
-
-Key Learning Outcomes:
-
-Game loop implementation and frame control
-
-Real-time collision detection
-
-Modular JavaScript design
-
-Canvas-based rendering optimization
-
-Event-driven input handling
-
-Future Enhancements:
-
-Advanced enemy AI behaviors
-
-Boss fights and special attack patterns
-
-Sound effects and background music
-
-Mobile touch support
-
-Save/load game state
+[LinkedIn](https://www.linkedin.com/in/nikitha-singhraj-purohit-862317301) · [GitHub](https://github.com/Nikki03-tech)
