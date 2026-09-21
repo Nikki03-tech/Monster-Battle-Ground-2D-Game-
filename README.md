@@ -17,11 +17,11 @@ This is my **first project**. The core game engine follows a YouTube tutorial (s
 
 | Landing page | Signup / Login |
 | :---: | :---: |
-| ![Landing page](screenshots/landing.png) | ![Signup and login](screenshots/login.png) |
+| ![Landing page](Screenshots/landing.png) | ![Signup and login](Screenshots/login.png) |
 
 | Gameplay | Win screen |
 | :---: | :---: |
-| ![Gameplay](screenshots/gameplay.png) | ![Win screen](screenshots/win.png) |
+| ![Gameplay](Screenshots/gameplay.png) | ![Win screen](Screenshots/win.png) |
 
 ---
 
