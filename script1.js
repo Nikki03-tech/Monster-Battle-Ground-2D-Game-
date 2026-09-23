@@ -12,121 +12,118 @@ this.winningScore = 100;window.addEventListener('load', function () {
     class InputHandler {
         constructor(game) {
             this.game = game;
-            
+
+            // ==========================================
+            // KEYBOARD CONTROLS
+            // ==========================================
+
             window.addEventListener('keydown', e => {
-                if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-                e.preventDefault();
 
-                if (this.game.keys.indexOf(e.key) === -1) {
-                    this.game.keys.push(e.key);
+                // UP
+                if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+
+                    if (this.game.keys.indexOf('ArrowUp') === -1) {
+                        this.game.keys.push('ArrowUp');
+                    }
                 }
-            }
 
-            // Spacebar = Shoot
-            if (e.code === 'Space') {
+                // DOWN
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+
+                    if (this.game.keys.indexOf('ArrowDown') === -1) {
+                        this.game.keys.push('ArrowDown');
+                    }
+                }
+
+                // SPACE = SHOOT
+                if (e.code === 'Space') {
+                    e.preventDefault();
+
+                    if (!this.game.gameOver) {
+                        this.game.player.shootTop();
+                    }
+                }
+
+                // D = DEBUG
+                if (e.key.toLowerCase() === 'd') {
+                    this.game.debug = !this.game.debug;
+                }
+            });
+
+
+            window.addEventListener('keyup', e => {
+
+                if (
+                    e.key === 'ArrowUp' ||
+                    e.key === 'ArrowDown'
+                ) {
+
+                    const index =
+                        this.game.keys.indexOf(e.key);
+
+                    if (index > -1) {
+                        this.game.keys.splice(index, 1);
+                    }
+                }
+            });
+
+
+            // ==========================================
+            // SCREEN UP BUTTON
+            // ONE CLICK = MOVE UP
+            // ==========================================
+
+            upButton.addEventListener('pointerdown', e => {
+
                 e.preventDefault();
+
+                if (this.game.gameOver) return;
+
+                this.game.player.y -= 30;
+
+                if (this.game.player.y < 0) {
+                    this.game.player.y = 0;
+                }
+            });
+
+
+            // ==========================================
+            // SCREEN DOWN BUTTON
+            // ONE CLICK = MOVE DOWN
+            // ==========================================
+
+            downButton.addEventListener('pointerdown', e => {
+                e.preventDefault();
+
+                if (this.game.gameOver) return;
+
+                this.game.player.y += 30;
+
+                if (this.game.player.y < 0) {
+                    this.game.player.y = 0;
+                }
+            });
+
+
+            // ==========================================
+            // SCREEN SHOOT BUTTON
+            // ==========================================
+
+            shootButton.addEventListener('pointerdown', e => {
+
+                e.preventDefault();
+
+                if (this.game.gameOver) return;
+
                 this.game.player.shootTop();
-            }
-
-            // D = Debug mode
-            if (e.key.toLowerCase() === 'd') {
-                this.game.debug = !this.game.debug;
-            }
-        });
-
-        window.addEventListener('keyup', e => {
-
-            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-
-                const index = this.game.keys.indexOf(e.key);
-
-                if (index > -1) {
-                    this.game.keys.splice(index, 1);
+                if (this.game.player.y < 0) {
+                    this.game.player.y = 0;
                 }
-            }
-        });
-
-
-        // =========================
-        // SCREEN UP BUTTON
-        // =========================
-
-        upButton.addEventListener('pointerdown', e => {
-
-            e.preventDefault();
-
-            if (this.game.keys.indexOf('ArrowUp') === -1) {
-                this.game.keys.push('ArrowUp');
-            }
-        });
-
-        upButton.addEventListener('pointerup', e => {
-
-            e.preventDefault();
-
-            const index = this.game.keys.indexOf('ArrowUp');
-
-            if (index > -1) {
-                this.game.keys.splice(index, 1);
-            }
-        });
-
-        upButton.addEventListener('pointercancel', () => {
-
-            const index = this.game.keys.indexOf('ArrowUp');
-
-            if (index > -1) {
-                this.game.keys.splice(index, 1);
-            }
-        });
-
-
-        // =========================
-        // SCREEN DOWN BUTTON
-        // =========================
-
-        downButton.addEventListener('pointerdown', e => {
-
-            e.preventDefault();
-
-            if (this.game.keys.indexOf('ArrowDown') === -1) {
-                this.game.keys.push('ArrowDown');
-            }
-        });
-
-        downButton.addEventListener('pointerup', e => {
-
-            e.preventDefault();
-
-            const index = this.game.keys.indexOf('ArrowDown');
-
-            if (index > -1) {
-                this.game.keys.splice(index, 1);
-            }
-        });
-
-        downButton.addEventListener('pointercancel', () => {
-
-            const index = this.game.keys.indexOf('ArrowDown');
-
-            if (index > -1) {
-                this.game.keys.splice(index, 1);
-            }
-        });
-
-
-        // =========================
-        // SCREEN SHOOT BUTTON
-        // =========================
-
-        shootButton.addEventListener('click', e => {
-
-            e.preventDefault();
-
-            this.game.player.shootTop();
-        });
+            });
+        }
     }
-}
     class Projectile {
         constructor(game, x, y) {
             this.game = game;
@@ -665,7 +662,6 @@ function showGameOverScreen(game, won) {
             this.keys = [];
             this.input = new InputHandler(this);
             this.ui = new UI(this);
-            this.keys = [];
             this.enemies = [];
             this.particles = [];
             this.explosions = [];
@@ -684,12 +680,22 @@ function showGameOverScreen(game, won) {
             this.debug = false;
         }
         update(deltaTime) {
+
+    // Stop the game completely after win or lose
             if (this.gameOver) {
                 return;
             }
+
+            // Update timer
             this.gameTime += deltaTime;
+
+
+            // ==========================================
+            // 30 SECOND TIME LIMIT
+            // ==========================================
+
             if (this.gameTime >= this.timeLimit) {
-                
+
                 this.gameTime = this.timeLimit;
 
                 this.gameOver = true;
@@ -698,192 +704,378 @@ function showGameOverScreen(game, won) {
 
                 return;
             }
+
+
+            // ==========================================
+            // BACKGROUND
+            // ==========================================
+
             this.background.update();
+
+
+            // ==========================================
+            // PLAYER
+            // ==========================================
+
             this.player.update(deltaTime);
-            this.enemies.forEach(enemy => {
-                enemy.update();
-                if (this.checkCollision(this.player, enemy)) {
-                    if (enemy.type === 'lucky') {
 
-                    this.player.enterPowerUp();
 
-                    } else {
-                        if (!this.gameOver) {
+            // ==========================================
+            // AMMO
+            // ==========================================
 
-                        this.score--;
-                    }
+            if (this.ammoTimer > this.ammoInterval) {
 
+                if (this.ammo < this.maxAmmo) {
+                    this.ammo++;
                 }
+
+                this.ammoTimer = 0;
+
+            } else {
+
+                this.ammoTimer += deltaTime;
 
             }
-            this.player.projectiles.forEach(projectile => {
-                if (this.checkCollision(projectile, enemy)) {
-                    enemy.lives--;
 
 
-                
-                    projectile.markedForDeletion = true;
-                    
-                    if (enemy.lives <= 0) {
-                        
-                        enemy.markedForDeletion = true;
-                        
-                        if (!this.gameOver) {
-                            this.score += enemy.score;
+            // ==========================================
+            // PARTICLES
+            // ==========================================
 
-                        }
-                        
-                        if (this.score >= this.winningScore) {
-                            
-                            this.score = this.winningScore;
+            this.particles.forEach(particle => {
 
-                             this.gameOver = true;
-
-                             showGameOverScreen(this, true);
-
-                             // STOP UPDATE IMMEDIATELY
-                             return;
-
-                        }
-
-                    }
-
-                }
+                particle.update();
 
             });
 
-        });
-        
-        this.enemies =
-          this.enemies.filter(enemy =>
-            !enemy.markedForDeletion
-          );
+            this.particles =
+                this.particles.filter(
+                    particle => !particle.markedForDeletion
+                );
 
 
-    // ==========================================
-    // ADD NEW ENEMIES
-    // ==========================================
+            // ==========================================
+            // EXPLOSIONS
+            // ==========================================
 
-        if (this.enemyTimer > this.enemyInterval) {
+            this.explosions.forEach(explosion => {
 
-            this.addEnemy();
+                explosion.update(deltaTime);
 
-            this.enemyTimer = 0;
+            });
 
-        } else {
+            this.explosions =
+                this.explosions.filter(
+                    explosion => !explosion.markedForDeletion
+                );
 
-            this.enemyTimer += deltaTime;
+
+            // ==========================================
+            // ENEMIES
+            // ==========================================
+
+            this.enemies.forEach(enemy => {
+
+                enemy.update();
+
+
+                // --------------------------------------
+                // PLAYER HITS ENEMY
+                // --------------------------------------
+
+                if (this.checkCollision(this.player, enemy)) {
+
+                    enemy.markedForDeletion = true;
+
+                    this.addExplosion(enemy);
+
+
+                    for (let i = 0; i < enemy.score; i++) {
+
+                        this.particles.push(
+                            new Particle(
+                                this,
+                                enemy.x + enemy.width * 0.5,
+                                enemy.y + enemy.height * 0.5
+                            )
+                        );
+
+                    }
+
+
+                    if (enemy.type === 'lucky') {
+
+                        this.player.enterPowerUp();
+
+                    } else if (!this.gameOver) {
+
+                        this.score--;
+
+                    }
+
+                }
+
+
+                // --------------------------------------
+                // PROJECTILE HITS ENEMY
+                // --------------------------------------
+
+                this.player.projectiles.forEach(projectile => {
+
+                    if (this.checkCollision(projectile, enemy)) {
+
+                        enemy.lives--;
+
+                        projectile.markedForDeletion = true;
+
+
+                        this.particles.push(
+                            new Particle(
+                                this,
+                                enemy.x + enemy.width * 0.5,
+                                enemy.y + enemy.height * 0.5
+                            )
+                        );
+
+
+                        // ----------------------------------
+                        // ENEMY DESTROYED
+                        // ----------------------------------
+
+                        if (enemy.lives <= 0) {
+
+
+                            for (let i = 0; i < enemy.score; i++) {
+
+                                this.particles.push(
+                                    new Particle(
+                                        this,
+                                        enemy.x + enemy.width * 0.5,
+                                        enemy.y + enemy.height * 0.5
+                                    )
+                                );
+
+                            }
+
+
+                            enemy.markedForDeletion = true;
+
+                            this.addExplosion(enemy);
+
+
+                            // Hive enemy creates drones
+                            if (enemy.type === 'hive') {
+
+                                for (let i = 0; i < 5; i++) {
+
+                                    this.enemies.push(
+                                        new Drone(
+                                            this,
+                                            enemy.x +
+                                                Math.random() * enemy.width,
+
+                                            enemy.y +
+                                                Math.random() *
+                                                enemy.height * 0.5
+                                        )
+                                    );
+
+                                }
+
+                            }
+
+
+                            // Add score
+                            if (!this.gameOver) {
+
+                                this.score += enemy.score;
+
+                            }
+
+
+                            // ==================================
+                            // WIN CONDITION - 65 POINTS
+                            // ==================================
+
+                            if (this.score >= this.winningScore) {
+
+                                this.score = this.winningScore;
+
+                                this.gameOver = true;
+
+                                showGameOverScreen(this, true);
+
+                                // STOP UPDATE IMMEDIATELY
+                                return;
+
+                            }
+
+                        }
+
+                    }
+
+                });
+
+            });
+
+
+            // ==========================================
+            // REMOVE DELETED ENEMIES
+            // ==========================================
+
+            this.enemies =
+                this.enemies.filter(
+                    enemy => !enemy.markedForDeletion
+                );
+
+
+            // ==========================================
+            // CREATE NEW ENEMIES
+            // ==========================================
+
+            if (
+                this.enemyTimer > this.enemyInterval &&
+                !this.gameOver
+            ) {
+
+                this.addEnemy();
+
+                this.enemyTimer = 0;
+
+            } else {
+
+                this.enemyTimer += deltaTime;
+
+                        }
         }
 
+        // ==========================================
+        // DRAW
+        // ==========================================
 
-    // ==========================================
-    // UPDATE PARTICLES
-    // ==========================================
-
-        this.particles.forEach(particle => {
-
-           particle.update();
-
-        });
-
-
-        this.particles =
-            this.particles.filter(particle =>
-               !particle.markedForDeletion
-            );
-
-
-    // ==========================================
-    // UPDATE FLOATING MESSAGES
-    // ==========================================
-
-        this.messages.forEach(message => {
-
-             message.update();
-
-        });
-
-
-        this.messages =
-            this.messages.filter(message =>
-                !message.markedForDeletion
-            );
-
-
-    // ==========================================
-    // UPDATE COLLISIONS / OTHER OBJECTS
-    // ==========================================
-
-        this.player.projectiles =
-            this.player.projectiles.filter(projectile =>
-              !projectile.markedForDeletion
-            );
-}
         draw(context) {
+
             this.background.draw(context);
             this.ui.draw(context);
             this.player.draw(context);
-            this.particles.forEach(particle => particle.draw(context));
-            this.enemies.forEach(enemy => enemy.draw(context));
-            this.explosions.forEach(explosion => explosion.draw(context));
+
+            this.particles.forEach(
+                particle => particle.draw(context)
+            );
+
+            this.enemies.forEach(
+                enemy => enemy.draw(context)
+            );
+
+            this.explosions.forEach(
+                explosion => explosion.draw(context)
+            );
+
             this.background.layer4.draw(context);
         }
+
+
+        // ==========================================
+        // ADD ENEMY
+        // ==========================================
+
         addEnemy() {
+
             const randomize = Math.random();
-            if (randomize < 0.3) this.enemies.push(new Angler1(this));
-            else if (randomize < 0.6) this.enemies.push(new Angler2(this));
-            else if (randomize < 0.7) this.enemies.push(new HiveWhale(this));
-            else this.enemies.push(new LuckyFish(this));
-        }
-        addExplosion(enemy) {
-            const randomize = Math.random();
-            if (randomize < 0.5) {
-                this.explosions.push(new SmokeExplosion (this, enemy.x + enemy.width * 0.5, enemy.y +
-                enemy.height * 0.5));
+
+            if (randomize < 0.3) {
+
+                this.enemies.push(
+                    new Angler1(this)
+                );
+
+            } else if (randomize < 0.6) {
+
+                this.enemies.push(
+                    new Angler2(this)
+                );
+
+            } else if (randomize < 0.7) {
+
+                this.enemies.push(
+                    new HiveWhale(this)
+                );
+
             } else {
-                this.explosions.push(new FireExplosion (this, enemy.x + enemy.width * 0.5, enemy.y +
-                enemy.height * 0.5));
+
+                this.enemies.push(
+                    new LuckyFish(this)
+                );
+
             }
         }
+
+
+        // ==========================================
+        // ADD EXPLOSION
+        // ==========================================
+
+        addExplosion(enemy) {
+
+            const randomize = Math.random();
+
+            if (randomize < 0.5) {
+
+                this.explosions.push(
+                    new SmokeExplosion(
+                        this,
+                        enemy.x + enemy.width * 0.5,
+                        enemy.y + enemy.height * 0.5
+                    )
+                );
+
+            } else {
+
+                this.explosions.push(
+                    new FireExplosion(
+                        this,
+                        enemy.x + enemy.width * 0.5,
+                        enemy.y + enemy.height * 0.5
+                    )
+                );
+
+            }
+        }
+
+
+        // ==========================================
+        // COLLISION
+        // ==========================================
+
         checkCollision(rect1, rect2) {
+
             return (
                 rect1.x < rect2.x + rect2.width &&
                 rect1.x + rect1.width > rect2.x &&
                 rect1.y < rect2.y + rect2.height &&
                 rect1.y + rect1.height > rect2.y
             );
+
         }
+
     }
-  
+
+
     const game = new Game(canvas.width, canvas.height);
 
-
-// Create the Win/Lose screen
     createGameOverScreen(game);
-
 
     let lastTime = 0;
 
-
     function animate(timeStamp) {
+
         const deltaTime = timeStamp - lastTime;
         lastTime = timeStamp;
 
-
-    // ==========================================
-    // UPDATE ONLY WHILE GAME IS RUNNING
-    // ==========================================
-
         if (!game.gameOver) {
-
-           game.update(deltaTime);
-
+            game.update(deltaTime);
         }
-
-
-    // ==========================================
-    // DRAW
-    // ==========================================
 
         ctx.clearRect(
             0,
@@ -896,11 +1088,9 @@ function showGameOverScreen(game, won) {
 
         if (!game.gameOver) {
             requestAnimationFrame(animate);
-
         }
-
     }
 
-
     animate(0);
+
 });
