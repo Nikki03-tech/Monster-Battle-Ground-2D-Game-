@@ -1,0 +1,59 @@
+*{
+    margin:0px;
+    padding: opx;
+    box-sizing: border-box;
+    font-family: 'Poppins',sans-serif;
+    text-align: center;
+    color: black;
+    line-height: 1.5;
+    letter-spacing: 1px;
+}
+.wrapper{
+    min-height: 100vh;
+    width: 100%;
+    background-image: linear-gradient(rgba(170, 168, 168, 0.532),rgba(161, 159, 159, 0.504)), url('pp.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+}
+.testimonial{
+    padding: 30px 100px;
+}
+article h1{
+    font-size: 50px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+
+}
+article h1:after{
+    content: "";
+    height: 5px;
+    width: 225px;
+    background-color:white;
+    display: block;
+    margin: auto;
+}
+article img{
+    height: 200px;
+    width: 200px;
+    border: 2px solid white;
+    border-radius: 50%;
+    margin-top: 60px;
+}
+blockquote{
+    font-family: sans-serif;
+    font-size: 20px;
+    margin-top: 30px;
+}
+article h5{
+    text-transform: uppercase;
+    font-size: 30px;
+    margin-top: 40px;
+    letter-spacing: 1.5px;
+    color:black;
+}
+article p{
+    font-size: 18px;
+}

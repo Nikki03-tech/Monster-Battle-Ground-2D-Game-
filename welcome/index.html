@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Space</title>
+    <style>
+        /* General body styling */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow: hidden;
+        }
+
+        /* Background styling */
+        .background {
+            background-image: url('wee.png'); /* Space-themed background */
+            background-size: cover;
+            background-position: center;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        /* Title styling */
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Button styling */
+        .buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 2px solid white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Exit button specific styling */
+        #exitButton {
+            background-color: rgba(255, 0, 0, 0.5);
+        }
+
+        #exitButton:hover {
+            background-color: rgba(255, 0, 0, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <div class="background">
+        <h1>Welcome!!</h1>
+        <h2>Press Start to Play the game</h2>
+        <div class="buttons">
+            <button id="startButton"><a href="../game/game.html">Start</a></button>
+            <button id="exitButton" ><a href="../login/index.html">Exit</a></button>
+        </div>
+    </div>
+
+    <script>
+        // Add functionality to the buttons
+        document.getElementById('startButton').addEventListener('click', function() {
+            
+        });
+
+        document.getElementById('exitButton').addEventListener('click', function() {
+            
+        });
+    </script>
+</body>
+</html>

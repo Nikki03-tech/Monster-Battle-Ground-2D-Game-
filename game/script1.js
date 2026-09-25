@@ -574,28 +574,46 @@ this.winningScore = 100;window.addEventListener('load', function () {
     `;
 
     const box = overlay.querySelector('.game-over-box');
-
+    
     box.style.cssText = `
         text-align: center;
-        background: white;
-        padding: 30px 40px;
-        border-radius: 15px;
-        min-width: 280px;
+        background: rgba(5, 20, 70, 0.92);
+        padding: 30px 45px;
+        border-radius: 18px;
+        min-width: 320px;
+        border: 3px solid #174cff;
+        box-shadow: 0 0 25px rgba(0, 80, 255, 0.8);
+        color: white;
+    `;
+
+    const title = overlay.querySelector('#gameOverTitle');
+    
+    title.style.cssText = `
+        color: #174cff;
+        font-size: 48px;
+        font-weight: 900;
+        text-transform: uppercase;
+        text-shadow: 3px 3px 0px #000;
+        margin-bottom: 10px;
     `;
 
     overlay.querySelectorAll('button').forEach(button => {
-
+    
         button.style.cssText = `
             padding: 12px 22px;
             margin: 5px;
-            border: none;
+            border: 2px solid #174cff;
             border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
             font-weight: bold;
+            background: #174cff;
+            color: white;
+            box-shadow: 0 0 10px rgba(0, 80, 255, 0.6);
         `;
-
     });
+
+   
 
     document.body.appendChild(overlay);
 
@@ -644,6 +662,17 @@ function showGameOverScreen(game, won) {
             .textContent = 'Try again next time!';
 
     }
+
+
+    // Blue title styling for BOTH Win and Lose
+    const title =
+        overlay.querySelector('#gameOverTitle');
+
+    title.style.color = '#174cff';
+    title.style.fontSize = '48px';
+    title.style.fontWeight = '900';
+    title.style.textTransform = 'uppercase';
+    title.style.textShadow = '3px 3px 0px #000';
 
 
     overlay.querySelector('#finalScore')
