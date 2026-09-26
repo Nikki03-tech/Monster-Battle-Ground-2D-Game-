@@ -1,3 +1,35 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import {
+    getAuth,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCU2wRnU-8O8SPk9AgUBBnjKMfE82GQ6Ds",
+    authDomain: "monster-battle-ground.firebaseapp.com",
+    projectId: "monster-battle-ground",
+    storageBucket: "monster-battle-ground.firebasestorage.app",
+    messagingSenderId: "569924636272",
+    appId: "1:569924636272:web:7d99af119f2fd39dc12eb5",
+    measurementId: "G-Y9HEEBHBXT"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let currentUser = null;
+let gameResultSaved = false;
+
+onAuthStateChanged(auth, (user) => {
+    currentUser = user;
+});
 this.winningScore = 100;window.addEventListener('load', function () {
     const canvas = document.getElementById('canvas1');
     const ctx = canvas.getContext('2d');
@@ -637,10 +669,44 @@ this.winningScore = 100;window.addEventListener('load', function () {
 }
 
 
+async function saveGameResult(game, won) {
+    if (gameResultSaved) {
+        return;
+    }
+
+    if (!currentUser) {
+        console.log("No logged-in user. Game result was not saved.");
+        return;
+    }
+
+    try {
+        const timePlayed = Math.round(game.gameTime / 1000);
+
+        gameResultSaved = true;
+
+        await addDoc(
+            collection(db, "users", currentUser.uid, "games"),
+            {
+                result: won ? "WIN" : "LOSE",
+                score: game.score,
+                timePlayed: timePlayed,
+                completedAt: serverTimestamp()
+            }
+        );
+
+        console.log("Game result saved successfully!");
+    } catch (error) {
+        console.error("Error saving game result:", error);
+    }
+}
+
+
 function showGameOverScreen(game, won) {
 
     const overlay =
         document.getElementById('gameOverScreen');
+
+    saveGameResult(game, won);
 
     if (!overlay) return;
 

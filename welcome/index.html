@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Space</title>
+    <title>Welcome to Monster Battle Ground</title>
+
     <style>
-        /* General body styling */
         body, html {
             margin: 0;
             padding: 0;
@@ -15,10 +15,9 @@
             overflow: hidden;
         }
 
-        /* Background styling */
         .background {
-            background-image: url('wee.png'); /* Space-themed background */
-            background-size: cover;
+            background-image: url('wee.png');
+            background-size: 100% 100%;
             background-position: center;
             height: 100%;
             display: flex;
@@ -27,14 +26,16 @@
             flex-direction: column;
         }
 
-        /* Title styling */
         h1 {
             font-size: 3rem;
             margin-bottom: 20px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
         }
 
-        /* Button styling */
+        h2 {
+            margin-bottom: 25px;
+        }
+
         .buttons {
             display: flex;
             gap: 20px;
@@ -55,7 +56,6 @@
             background-color: rgba(255, 255, 255, 0.2);
         }
 
-        /* Exit button specific styling */
         #exitButton {
             background-color: rgba(255, 0, 0, 0.5);
         }
@@ -63,27 +63,89 @@
         #exitButton:hover {
             background-color: rgba(255, 0, 0, 0.7);
         }
+
+        button a {
+            color: white;
+            text-decoration: none;
+        }
     </style>
 </head>
+
 <body>
+
     <div class="background">
-        <h1>Welcome!!</h1>
+
+        <h1 id="welcomeMessage">Welcome!!</h1>
+
         <h2>Press Start to Play the game</h2>
+
         <div class="buttons">
-            <button id="startButton"><a href="../game/game.html">Start</a></button>
-            <button id="exitButton" ><a href="../home/index.html">Exit</a></button>
+
+            <button id="startButton">
+                <a href="../game/game.html">Start</a>
+            </button>
+
+            <button id="exitButton">
+                <a href="../home/index.html">Exit</a>
+            </button>
+
         </div>
+
     </div>
 
-    <script>
-        // Add functionality to the buttons
-        document.getElementById('startButton').addEventListener('click', function() {
-            
+
+    <script type="module">
+
+        import { initializeApp }
+            from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+
+        import {
+            getAuth,
+            onAuthStateChanged
+        }
+            from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCU2wRnU-8O8SPk9AgUBBnjKMfE82GQ6Ds",
+            authDomain: "monster-battle-ground.firebaseapp.com",
+            projectId: "monster-battle-ground",
+            storageBucket: "monster-battle-ground.firebasestorage.app",
+            messagingSenderId: "569924636272",
+            appId: "1:569924636272:web:7d99af119f2fd39dc12eb5"
+        };
+
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+
+        const welcomeMessage =
+            document.getElementById("welcomeMessage");
+
+
+        onAuthStateChanged(auth, (user) => {
+
+            if (user) {
+
+                const name = user.displayName || "Player";
+
+                const params = new URLSearchParams(window.location.search);
+                const returning = params.get("returning") === "true";
+
+                welcomeMessage.textContent = returning
+                    ? `Welcome back, ${name} 👋`
+                    : `Welcome, ${name} 👋`;
+
+            } else {
+
+                window.location.href = "../login/index.html";
+
+            }
+
         });
 
-        document.getElementById('exitButton').addEventListener('click', function() {
-            
-        });
     </script>
+
 </body>
 </html>

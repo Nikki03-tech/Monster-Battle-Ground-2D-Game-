@@ -4,36 +4,180 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register</title>
+
   <link rel="stylesheet" href="styless.css">
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
+
 <body>
+
   <div class="wrapper">
-    <form action="">
+
+    <form id="signupForm">
+
       <h1>Signup</h1>
+
       <div class="input-box">
-        <input type="text" placeholder="username" required>
-        <i class='bx bxs-user'></i>
+        <input
+          type="text"
+          id="username"
+          placeholder="username"
+          required
+        >
+        <i class="bx bxs-user"></i>
       </div>
+
       <div class="input-box">
-        <input type="text" placeholder="Enter Your Gmail"required>
-        <i class='bx bxs-user'></i>
+        <input
+          type="email"
+          id="email"
+          placeholder="Enter Your Gmail"
+          required
+        >
+        <i class="bx bxs-envelope"></i>
       </div>
+
       <div class="input-box">
-        <input type="password" placeholder="Password" required>
-        <i class='bx bxs-lock-alt' ></i>
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          required
+        >
+        <i class="bx bxs-lock-alt"></i>
       </div>
+
       <div class="remember-forgot">
-        <label><input type="checkbox">Remember Me</label>
+        <label>
+          <input type="checkbox" id="rememberMe">
+          Remember Me
+        </label>
+
         <a href="#">Forgot Password</a>
       </div>
-      <button type="submit" class="btn" ><a href="../welcome/index.html"> Signup</a></button>
+
+      <button type="submit" class="btn">
+        Signup
+      </button>
+
       <div class="register-link">
-        <p>Already have an account? <a href="../login/index.html">Login</a></p>
+        <p>
+          Already have an account?
+          <a href="../login/index.html">Login</a>
+        </p>
       </div>
+
+      <p id="signupMessage"></p>
+
     </form>
 
-
   </div>
+
+
+  <!-- Firebase -->
+  <script type="module">
+
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      updateProfile
+    }
+    from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+
+    // YOUR FIREBASE CONFIG
+    const firebaseConfig = {
+      apiKey: "AIzaSyCU2wRnU-8O8SPk9AgUBBnjKMfE82GQ6Ds",
+      authDomain: "monster-battle-ground.firebaseapp.com",
+      projectId: "monster-battle-ground",
+      storageBucket: "monster-battle-ground.firebasestorage.app",
+      messagingSenderId: "569924636272",
+      appId: "1:569924636272:web:7d99af119f2fd39dc12eb5"
+    };
+
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+
+    // Signup
+    const signupForm = document.getElementById("signupForm");
+    const message = document.getElementById("signupMessage");
+
+
+    signupForm.addEventListener("submit", async (event) => {
+
+      event.preventDefault();
+
+      const username =
+        document.getElementById("username").value.trim();
+
+      const email =
+        document.getElementById("email").value.trim();
+
+      const password =
+        document.getElementById("password").value;
+
+
+      message.textContent = "Creating your account...";
+
+
+      try {
+
+        const userCredential =
+          await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+
+        // Save username to Firebase user profile
+        await updateProfile(userCredential.user, {
+          displayName: username
+        });
+
+
+        message.textContent =
+          "Account created successfully!";
+
+
+        // Go to Welcome page
+        setTimeout(() => {
+          window.location.href = "../welcome/index.html?returning=false";
+        }, 800);
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        if (error.code === "auth/email-already-in-use") {
+          message.textContent =
+            "This email is already registered.";
+        }
+        else if (error.code === "auth/invalid-email") {
+          message.textContent =
+            "Please enter a valid email address.";
+        }
+        else if (error.code === "auth/weak-password") {
+          message.textContent =
+            "Password should be at least 6 characters.";
+        }
+        else {
+          message.textContent =
+            "Signup failed. Please try again.";
+        }
+
+      }
+
+    });
+
+  </script>
+
 </body>
 </html>

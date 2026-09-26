@@ -4,30 +4,154 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login Form</title>
+
   <link rel="stylesheet" href="styless.css">
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
+
 <body>
+
   <div class="wrapper">
-    <form action="">
+
+    <form id="loginForm">
+
       <h1>Login</h1>
+
       <div class="input-box">
-        <input type="text" placeholder="Username" required>
-        <i class='bx bxs-user'></i>
+        <input
+          type="email"
+          id="email"
+          placeholder="Email"
+          required
+        >
+        <i class="bx bxs-envelope"></i>
       </div>
+
       <div class="input-box">
-        <input type="password" placeholder="Password" required>
-        <i class='bx bxs-lock-alt' ></i>
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          required
+        >
+        <i class="bx bxs-lock-alt"></i>
       </div>
+
       <div class="remember-forgot">
-        <label><input type="checkbox">Remember Me</label>
+        <label>
+          <input type="checkbox" id="rememberMe">
+          Remember Me
+        </label>
+
         <a href="#">Forgot Password</a>
       </div>
-      <button type="submit" class="btn"><a href="../welcome/index.html">Login</a></button>
+
+      <button type="submit" class="btn">
+        Login
+      </button>
+
+      <p id="loginMessage"></p>
+
       <div class="register-link">
-        <p>Dont have an account? <a href="../signup/index.html">Signup</a></p>
+        <p>
+          Don't have an account?
+          <a href="../signup/index.html">Signup</a>
+        </p>
       </div>
+
     </form>
+
   </div>
+
+
+  <!-- Firebase Login -->
+
+  <script type="module">
+
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+
+    import {
+      getAuth,
+      signInWithEmailAndPassword
+    }
+      from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCU2wRnU-8O8SPk9AgUBBnjKMfE82GQ6Ds",
+      authDomain: "monster-battle-ground.firebaseapp.com",
+      projectId: "monster-battle-ground",
+      storageBucket: "monster-battle-ground.firebasestorage.app",
+      messagingSenderId: "569924636272",
+      appId: "1:569924636272:web:7d99af119f2fd39dc12eb5"
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+
+    const loginForm = document.getElementById("loginForm");
+    const loginMessage = document.getElementById("loginMessage");
+
+
+    loginForm.addEventListener("submit", async (event) => {
+
+      event.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      loginMessage.textContent = "Logging in...";
+
+
+      try {
+
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        loginMessage.textContent = "Login successful!";
+
+        setTimeout(() => {
+          window.location.href = "../welcome/index.html?returning=true";
+        }, 700);
+
+      }
+
+      catch (error) {
+
+        console.error(error);
+
+        if (error.code === "auth/invalid-credential") {
+
+          loginMessage.textContent =
+            "Incorrect email or password.";
+
+        }
+
+        else if (error.code === "auth/user-not-found") {
+
+          loginMessage.textContent =
+            "No account found with this email.";
+
+        }
+
+        else {
+
+          loginMessage.textContent =
+            "Login failed. Please try again.";
+
+        }
+
+      }
+
+    });
+
+  </script>
+
 </body>
 </html>
