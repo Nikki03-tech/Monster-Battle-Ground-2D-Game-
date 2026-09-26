@@ -114,3 +114,261 @@ body {
     background-position: center;
     background-repeat: no-repeat;
 }
+
+
+/* Fit homepage to normal 100% browser zoom */
+.hero {
+    min-height: 100vh;
+    height:100vh;
+}
+
+.hero header {
+    padding: 20px 0 15px;
+}
+
+.hero header .logo h2 a {
+    font-size: 26px;
+}
+
+nav ul li a {
+    margin-left: 35px;
+    font-size: 14px;
+}
+
+.content {
+    padding-top: 55px;
+}
+
+.content .main-text {
+    margin-bottom: 20px;
+}
+
+.content .main-text h6 {
+    font-size: 22px;
+    margin-bottom: 18px;
+}
+
+.content .main-text h1 {
+    font-size: 58px;
+    margin: 0 0 22px;
+}
+
+.content .main-text h3 {
+    font-size: 34px;
+}
+
+.content .main-text p {
+    width: 420px;
+    font-size: 20px;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.content .main-text a {
+    padding: 9px 22px;
+}
+
+
+/* ================================
+   HOMEPAGE FINAL DESIGN
+================================ */
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: #000;
+}
+
+.hero {
+    min-height: 100vh;
+    height: 100vh;
+    background-image: url(ip.jpeg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.hero header {
+    padding: 20px 0 15px;
+}
+
+.hero header .logo h2 a {
+    font-size: 30px;
+}
+
+nav ul li a {
+    margin-left: 35px;
+    font-size: 14px;
+}
+
+.content {
+    padding-top: 65px;
+}
+
+.content .main-text {
+    margin-bottom: 20px;
+}
+
+.content .main-text h6 {
+    font-size: 22px;
+    margin-bottom: 18px;
+}
+
+.content .main-text h3 {
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+.content .main-text h1 {
+    font-size: 62px;
+    margin: 0 0 18px;
+}
+
+.content .main-text h4 {
+    font-size: 22px;
+    color: #174cff;
+    margin-bottom: 3px;
+}
+
+.content .main-text p {
+    width: 420px;
+    font-size: 21px;
+    line-height: 1.4;
+    margin-bottom: 28px;
+}
+
+/* Play Now button */
+.content .main-text .start-button {
+    display: inline-block;
+    width: 342px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    background: #d83232;
+    border: none;
+    padding: 10px 25px;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.content .main-text .start-button:hover {
+    background: #b91f1f;
+}
+
+
+/* ================================
+   REVIEWS
+================================ */
+
+.reviews-section {
+    min-height: 100vh;
+    padding: 80px 20px;
+    background: #071126;
+    color: white;
+}
+
+.reviews-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.reviews-container h2 {
+    font-size: 48px;
+    margin-bottom: 10px;
+    color: #174cff;
+    font-family: "Permanent Marker", sans-serif;
+}
+
+.reviews-subtitle {
+    font-size: 18px;
+    margin-bottom: 45px;
+    color: #ddd;
+}
+
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.review-card {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 30px 22px;
+}
+
+.review-card .stars {
+    color: #ffd21f;
+    font-size: 22px;
+    margin-bottom: 18px;
+}
+
+.review-card p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #eee;
+    min-height: 80px;
+}
+
+.review-card h3 {
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+.review-card span {
+    color: #aaa;
+    font-size: 14px;
+}
+
+.back-home {
+    display: inline-block;
+    margin-top: 45px;
+    padding: 10px 25px;
+    background: #174cff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+@media (max-width: 800px) {
+
+    .hero {
+        min-height: 100vh;
+    }
+
+    .hero header {
+        padding: 15px 0;
+    }
+
+    nav ul li a {
+        margin-left: 15px;
+        font-size: 12px;
+    }
+
+    .content {
+        padding-top: 45px;
+    }
+
+    .content .main-text h1 {
+        font-size: 50px;
+    }
+
+    .content .main-text p {
+        width: 90%;
+        font-size: 18px;
+    }
+
+    .content .main-text .start-button {
+        width: 280px;
+    }
+
+    .reviews-grid {
+        grid-template-columns: 1fr;
+    }
+}
