@@ -631,7 +631,7 @@ this.winningScore = 100;window.addEventListener('load', function () {
     overlay.querySelector('#homeButton')
         .addEventListener('click', () => {
 
-            window.history.back();
+            window.location.href = "../home/index.html";
 
         });
 }
