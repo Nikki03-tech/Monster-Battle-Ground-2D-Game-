@@ -223,6 +223,12 @@
                         password
                     );
 
+                    // Make sure Firebase has finished restoring the session
+                    await auth.authStateReady();
+
+                    if (!auth.currentUser) {
+                        throw new Error("Firebase login session was not restored.");
+                    }
 
                     loginMessage.textContent =
                         "Login successful!";

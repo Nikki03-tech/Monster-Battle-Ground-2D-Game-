@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Game - Monster Battle Ground</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+            background: #111;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-size: 40px;
+            margin-bottom: 35px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            min-width: 180px;
+        }
+
+        .card h2 {
+            margin: 0 0 10px;
+        }
+
+        .number {
+            font-size: 35px;
+            font-weight: bold;
+        }
+
+        .history {
+            margin-top: 40px;
+            text-align: left;
+        }
+
+        .game {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+
+        #backButton {
+            margin-top: 30px;
+            padding: 12px 25px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>MY GAME</h1>
+
+        <div class="stats">
+
+            <div class="card">
+                <h2>HIGH SCORE</h2>
+                <div class="number" id="highScore">0</div>
+            </div>
+
+            <div class="card">
+                <h2>WIN SCORE</h2>
+                <div class="number" id="winScore">0</div>
+            </div>
+
+            <div class="card">
+                <h2>LOSE SCORE</h2>
+                <div class="number" id="loseScore">0</div>
+            </div>
+
+        </div>
+
+        <div class="history">
+
+            <h2>GAME HISTORY</h2>
+
+            <div id="gameHistory">
+                Loading game history...
+            </div>
+
+        </div>
+
+        <button id="backButton">
+            Back
+        </button>
+
+    </div>
+
+
+
+<script type="module">
+
+    import { initializeApp }
+        from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+
+    import {
+        getAuth,
+        onAuthStateChanged
+    }
+        from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+    import {
+        getFirestore,
+        collection,
+        getDocs,
+        query,
+        orderBy
+    }
+        from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCU2wRnU-8O8SPk9AgUBBnjKMfE82GQ6Ds",
+        authDomain: "monster-battle-ground.firebaseapp.com",
+        projectId: "monster-battle-ground",
+        storageBucket: "monster-battle-ground.firebasestorage.app",
+        messagingSenderId: "569924636272",
+        appId: "1:569924636272:web:7d99af119f2fd39dc12eb5"
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+    const db = getFirestore(app);
+
+
+    const highScore = document.getElementById("highScore");
+    const winScore = document.getElementById("winScore");
+    const loseScore = document.getElementById("loseScore");
+    const gameHistory = document.getElementById("gameHistory");
+
+
+    onAuthStateChanged(auth, async (user) => {
+
+        if (!user) {
+
+            window.location.href = "../login/index.html";
+
+            return;
+
+        }
+
+
+        try {
+
+            const gamesRef = collection(
+                db,
+                "users",
+                user.uid,
+                "games"
+            );
+
+
+            const gamesQuery = query(
+                gamesRef,
+                orderBy("completedAt", "desc")
+            );
+
+
+            const snapshot = await getDocs(gamesQuery);
+
+
+            const games = [];
+
+            snapshot.forEach((doc) => {
+
+                games.push(doc.data());
+
+            });
+
+
+            if (games.length === 0) {
+
+                gameHistory.innerHTML = "No games played yet.";
+
+                highScore.textContent = "0";
+                winScore.textContent = "0";
+                loseScore.textContent = "0";
+
+                return;
+
+            }
+
+
+            let highestScore = 0;
+            let latestWinScore = 0;
+            let latestLoseScore = 0;
+
+
+            games.forEach((game) => {
+
+                if (game.score > highestScore) {
+                    highestScore = game.score;
+                }
+
+            });
+
+
+            const latestWin = games.find(game => game.result === "WIN");
+            const latestLose = games.find(game => game.result === "LOSE");
+
+
+            if (latestWin) {
+                latestWinScore = latestWin.score;
+            }
+
+            if (latestLose) {
+                latestLoseScore = latestLose.score;
+            }
+
+
+            highScore.textContent = highestScore;
+            winScore.textContent = latestWinScore;
+            loseScore.textContent = latestLoseScore;
+
+
+            gameHistory.innerHTML = "";
+
+
+            games.forEach((game) => {
+
+                const gameDiv = document.createElement("div");
+
+                gameDiv.className = "game";
+
+                const icon = game.result === "WIN" ? "🏆" : "💀";
+
+                gameDiv.innerHTML = `
+                    ${icon}
+                    <strong>${game.result}</strong>
+                    &nbsp;&nbsp;
+                    Score: ${game.score}
+                    &nbsp;&nbsp;
+                    Time: ${game.timePlayed} sec
+                `;
+
+                gameHistory.appendChild(gameDiv);
+
+            });
+
+
+        } catch (error) {
+
+            console.error("Error loading game history:", error);
+
+        }
+
+    });
+
+
+    document.getElementById("backButton")
+        .addEventListener("click", () => {
+
+            window.location.href = "index.html";
+
+        });
+
+</script>
+
+</body>
+</html>

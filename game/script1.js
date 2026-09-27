@@ -30,7 +30,8 @@ let gameResultSaved = false;
 onAuthStateChanged(auth, (user) => {
     currentUser = user;
 });
-this.winningScore = 100;window.addEventListener('load', function () {
+
+window.addEventListener('load', function () {
     const canvas = document.getElementById('canvas1');
     const ctx = canvas.getContext('2d');
     canvas.width = 1000;
@@ -588,7 +589,7 @@ this.winningScore = 100;window.addEventListener('load', function () {
                 </button>
 
                 <button id="homeButton" type="button">
-                    Home
+                    Back
                 </button>
             </div>
         </div>
@@ -659,12 +660,10 @@ this.winningScore = 100;window.addEventListener('load', function () {
         });
 
 
-    // HOME
-    overlay.querySelector('#homeButton')
-        .addEventListener('click', () => {
-
-            window.location.href = "../home/index.html";
-
+    
+    // BACK TO WELCOME
+        overlay.querySelector('#homeButton').addEventListener('click', () => {
+            window.location.href = "../welcome/index.html";
         });
 }
 

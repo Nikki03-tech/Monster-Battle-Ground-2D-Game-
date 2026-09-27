@@ -1520,83 +1520,49 @@
            IMPORTANT AUTH CHECK
         ===================================== */
 
-        onAuthStateChanged(
-            auth,
-            async (user) => {
+        async function checkLogin() {
 
-                /*
-                 * Firebase has now finished
-                 * checking the login.
-                 */
+    try {
+        await auth.authStateReady();
 
-                if (!user) {
+        const user = auth.currentUser;
 
-                    /*
-                     * Only now do we redirect.
-                     */
+        if (!user) {
+            window.location.replace("../login/index.html");
+            return;
+        }
 
-                    window.location.replace(
-                        "../login/index.html"
-                    );
+        currentUser = user;
 
-                    return;
+        try {
+            await loadProfile(user);
+        }
+        catch (error) {
+            console.error("Profile error:", error);
 
-                }
+            currentProfile = {
+                username: user.displayName || "Player",
+                avatar: "default",
+                musicVolume: 100,
+                soundVolume: 100
+            };
 
+            updateProfileUI(user);
+        }
 
-                currentUser =
-                    user;
+    }
+    catch (error) {
+        console.error("Authentication error:", error);
 
-
-                try {
-
-                    await loadProfile(
-                        user
-                    );
-
-                }
-
-                catch (error) {
-
-                    console.error(
-                        "Profile error:",
-                        error
-                    );
-
-
-                    /*
-                     * Even if Firestore has a
-                     * temporary problem, DON'T
-                     * kick the logged-in user
-                     * back to Login.
-                     */
-
-                    currentProfile = {
-
-                        username:
-                            user.displayName ||
-                            "Player",
-
-                        avatar:
-                            "default",
-
-                        musicVolume:
-                            100,
-
-                        soundVolume:
-                            100
-
-                    };
-
-
-                    updateProfileUI(
-                        user
-                    );
-
-                }
-
+        setTimeout(() => {
+            if (!auth.currentUser) {
+                window.location.replace("../login/index.html");
             }
-        );
+        }, 1500);
+    }
+}
+
+checkLogin();;
 
 
 
