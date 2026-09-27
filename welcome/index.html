@@ -1149,7 +1149,9 @@
             getAuth,
             onAuthStateChanged,
             updateProfile,
-            signOut
+            signOut,
+            setPersistence,
+            browserLocalPersistence
         } from
         "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
@@ -1522,48 +1524,151 @@
 
         async function checkLogin() {
 
-    try {
-        await auth.authStateReady();
+            try {
 
-        const user = auth.currentUser;
+                /*
+                 * Make sure Firebase uses local browser
+                 * persistence on this page too.
+                 */
+                await setPersistence(
+                    auth,
+                    browserLocalPersistence
+                );
 
-        if (!user) {
-            window.location.replace("../login/index.html");
-            return;
-        }
+                /*
+                 * Wait until Firebase completely finishes
+                 * restoring the login session.
+                 */
+                await auth.authStateReady();
 
-        currentUser = user;
+                const user = auth.currentUser;
 
-        try {
-            await loadProfile(user);
-        }
-        catch (error) {
-            console.error("Profile error:", error);
+                if (user) {
 
-            currentProfile = {
-                username: user.displayName || "Player",
-                avatar: "default",
-                musicVolume: 100,
-                soundVolume: 100
-            };
+                    currentUser = user;
 
-            updateProfileUI(user);
-        }
+                    try {
+                        await loadProfile(user);
+                    }
+                    catch (error) {
 
-    }
-    catch (error) {
-        console.error("Authentication error:", error);
+                        console.error(
+                            "Profile error:",
+                            error
+                        );
 
-        setTimeout(() => {
-            if (!auth.currentUser) {
-                window.location.replace("../login/index.html");
+                        currentProfile = {
+                            username:
+                                user.displayName ||
+                                "Player",
+
+                            email:
+                                user.email || "",
+
+                            avatar:
+                                "default",
+
+                            musicVolume:
+                                100,
+
+                            soundVolume:
+                                100
+                        };
+
+                        updateProfileUI(user);
+                    }
+
+                    return;
+                }
+
+                /*
+                 * Firebase may still need a moment to notify
+                 * the authentication listener.
+                 */
+                const unsubscribe =
+                    onAuthStateChanged(
+                        auth,
+                        async (firebaseUser) => {
+
+                            unsubscribe();
+
+                            if (!firebaseUser) {
+                                window.location.replace(
+                                    "../login/index.html"
+                                );
+                                return;
+                            }
+
+                            currentUser =
+                                firebaseUser;
+
+                            try {
+                                await loadProfile(
+                                    firebaseUser
+                                );
+                            }
+                            catch (error) {
+
+                                console.error(
+                                    "Profile error:",
+                                    error
+                                );
+
+                                currentProfile = {
+                                    username:
+                                        firebaseUser.displayName ||
+                                        "Player",
+
+                                    email:
+                                        firebaseUser.email ||
+                                        "",
+
+                                    avatar:
+                                        "default",
+
+                                    musicVolume:
+                                        100,
+
+                                    soundVolume:
+                                        100
+                                };
+
+                                updateProfileUI(
+                                    firebaseUser
+                                );
+                            }
+
+                        }
+                    );
+
             }
-        }, 1500);
-    }
-}
+            catch (error) {
 
-checkLogin();;
+                console.error(
+                    "Authentication error:",
+                    error
+                );
 
+                /*
+                 * Give Firebase a little time before deciding
+                 * that the user is actually logged out.
+                 */
+                setTimeout(
+                    () => {
+
+                        if (!auth.currentUser) {
+                            window.location.replace(
+                                "../login/index.html"
+                            );
+                        }
+
+                    },
+                    3000
+                );
+            }
+        }
+
+        checkLogin();
 
 
         /* =====================================
