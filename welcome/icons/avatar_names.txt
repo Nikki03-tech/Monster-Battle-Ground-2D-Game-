@@ -1,0 +1,21 @@
+1. Space Explorer
+2. Seahorse
+3. Octopus
+4. Sea Turtle
+5. Jellyfish
+6. Shark
+7. Starfish
+8. Moon
+9. Ocean Queen
+10. Submarine
+11. Crab
+12. Manta Ray
+13. Coral Reef
+14. Galaxy
+15. Angler Fish
+16. Alien Fish
+17. Whale
+18. Ocean King
+19. Planet
+20. Energy Core
+21. Ocean Drone

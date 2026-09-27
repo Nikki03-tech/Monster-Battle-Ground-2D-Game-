@@ -367,6 +367,15 @@
         }
 
 
+        .profile-avatar-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #8fdcff;
+            margin-top: 4px;
+            margin-bottom: 3px;
+        }
+
+
         .profile-email {
 
             font-size: 12px;
@@ -578,11 +587,11 @@
             display: grid;
 
             grid-template-columns:
-                repeat(4,1fr);
+                repeat(3,1fr);
 
-            gap: 14px;
+            gap: 10px;
 
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
 
@@ -592,7 +601,9 @@
 
             aspect-ratio: 1;
 
-            padding: 6px;
+            padding: 4px;
+
+            min-width: 0;
 
             background:
                 rgba(255,255,255,.08);
@@ -621,9 +632,11 @@
 
             height: 100%;
 
-            object-fit: cover;
+            object-fit: contain;
 
             border-radius: 9px;
+
+            display: block;
         }
 
 
@@ -769,6 +782,14 @@
                         class="profile-name"
                     >
                         Player
+                    </div>
+
+
+                    <div
+                        id="avatarName"
+                        class="profile-avatar-name"
+                    >
+                        Ocean Explorer
                     </div>
 
 
@@ -930,139 +951,112 @@
 
             <div class="avatar-grid">
 
+    <div class="avatar-option" data-avatar="01_space_explorer.png" data-avatar-name="Space Explorer">
+        <img src="icons/01_space_explorer.png" alt="Space Explorer">
+        <span>Space Explorer</span>
+    </div>
 
-                <button
-                    class="avatar-option"
-                    data-avatar="player.png"
-                    type="button"
-                >
-                    <img
-                        src="../game/player.png"
-                        alt="Avatar"
-                    >
-                </button>
+    <div class="avatar-option" data-avatar="02_seahorse.png" data-avatar-name="Seahorse">
+        <img src="icons/02_seahorse.png" alt="Seahorse">
+        <span>Seahorse</span>
+    </div>
 
+    <div class="avatar-option" data-avatar="03_octopus.png" data-avatar-name="Octopus">
+        <img src="icons/03_octopus.png" alt="Octopus">
+        <span>Octopus</span>
+    </div>
 
-                <button
-                    class="avatar-option"
-                    data-avatar="angler1.png"
-                    type="button"
-                >
-                    <img
-                        src="../game/angler1.png"
-                        alt="Avatar"
-                    >
-                </button>
+    <div class="avatar-option" data-avatar="04_sea_turtle.png" data-avatar-name="Sea Turtle">
+        <img src="icons/04_sea_turtle.png" alt="Sea Turtle">
+        <span>Sea Turtle</span>
+    </div>
 
+    <div class="avatar-option" data-avatar="05_jellyfish.png" data-avatar-name="Jellyfish">
+        <img src="icons/05_jellyfish.png" alt="Jellyfish">
+        <span>Jellyfish</span>
+    </div>
 
-                <button
-                    class="avatar-option"
-                    data-avatar="angler2.png"
-                    type="button"
-                >
-                    <img
-                        src="../game/angler2.png"
-                        alt="Avatar"
-                    >
-                </button>
+    <div class="avatar-option" data-avatar="06_shark.png" data-avatar-name="Shark">
+        <img src="icons/06_shark.png" alt="Shark">
+        <span>Shark</span>
+    </div>
 
+    <div class="avatar-option" data-avatar="07_starfish.png" data-avatar-name="Starfish">
+        <img src="icons/07_starfish.png" alt="Starfish">
+        <span>Starfish</span>
+    </div>
 
-                <button
-                    class="avatar-option"
-                    data-avatar="drone.png"
-                    type="button"
-                >
-                    <img
-                        src="../game/drone.png"
-                        alt="Avatar"
-                    >
-                </button>
+    <div class="avatar-option" data-avatar="08_moon.png" data-avatar-name="Moon">
+        <img src="icons/08_moon.png" alt="Moon">
+        <span>Moon</span>
+    </div>
 
+    <div class="avatar-option" data-avatar="09_ocean_queen.png" data-avatar-name="Ocean Queen">
+        <img src="icons/09_ocean_queen.png" alt="Ocean Queen">
+        <span>Ocean Queen</span>
+    </div>
 
-                <button
-                    class="avatar-option"
-                    data-avatar="hivewhale.png"
-                    type="button"
-                >
-                    <img
-                        src="../game/hivewhale.png"
-                        alt="Avatar"
-                    >
-                </button>
+    <div class="avatar-option" data-avatar="10_submarine.png" data-avatar-name="Submarine">
+        <img src="icons/10_submarine.png" alt="Submarine">
+        <span>Submarine</span>
+    </div>
 
+    <div class="avatar-option" data-avatar="11_crab.png" data-avatar-name="Crab">
+        <img src="icons/11_crab.png" alt="Crab">
+        <span>Crab</span>
+    </div>
 
-                <button
-                    class="avatar-option"
-                    data-avatar="lucky.png"
-                    type="button"
-                >
-                    <img
-                        src="../game/lucky.png"
-                        alt="Avatar"
-                    >
-                </button>
+    <div class="avatar-option" data-avatar="12_manta_ray.png" data-avatar-name="Manta Ray">
+        <img src="icons/12_manta_ray.png" alt="Manta Ray">
+        <span>Manta Ray</span>
+    </div>
 
+    <div class="avatar-option" data-avatar="13_coral_reef.png" data-avatar-name="Coral Reef">
+        <img src="icons/13_coral_reef.png" alt="Coral Reef">
+        <span>Coral Reef</span>
+    </div>
 
-                <button
-                    class="avatar-option"
-                    data-avatar="gears.png"
-                    type="button"
-                >
-                    <img
-                        src="../game/gears.png"
-                        alt="Avatar"
-                    >
-                </button>
+    <div class="avatar-option" data-avatar="14_galaxy.png" data-avatar-name="Galaxy">
+        <img src="icons/14_galaxy.png" alt="Galaxy">
+        <span>Galaxy</span>
+    </div>
 
+    <div class="avatar-option" data-avatar="15_angler_fish.png" data-avatar-name="Angler Fish">
+        <img src="icons/15_angler_fish.png" alt="Angler Fish">
+        <span>Angler Fish</span>
+    </div>
 
-                <button
-                    class="avatar-option"
-                    data-avatar="projectile.png"
-                    type="button"
-                >
-                    <img
-                        src="../game/projectile.png"
-                        alt="Avatar"
-                    >
-                </button>
+    <div class="avatar-option" data-avatar="16_alien_fish.png" data-avatar-name="Alien Fish">
+        <img src="icons/16_alien_fish.png" alt="Alien Fish">
+        <span>Alien Fish</span>
+    </div>
 
+    <div class="avatar-option" data-avatar="17_whale.png" data-avatar-name="Whale">
+        <img src="icons/17_whale.png" alt="Whale">
+        <span>Whale</span>
+    </div>
 
-                <button
-                    class="avatar-option"
-                    data-avatar="layer1.png"
-                    type="button"
-                >
-                    <img
-                        src="../game/layer1.png"
-                        alt="Avatar"
-                    >
-                </button>
+    <div class="avatar-option" data-avatar="18_ocean_king.png" data-avatar-name="Ocean King">
+        <img src="icons/18_ocean_king.png" alt="Ocean King">
+        <span>Ocean King</span>
+    </div>
 
+    <div class="avatar-option" data-avatar="19_planet.png" data-avatar-name="Planet">
+        <img src="icons/19_planet.png" alt="Planet">
+        <span>Planet</span>
+    </div>
 
-                <button
-                    class="avatar-option"
-                    data-avatar="layer2.png"
-                    type="button"
-                >
-                    <img
-                        src="../game/layer2.png"
-                        alt="Avatar"
-                    >
-                </button>
+    <div class="avatar-option" data-avatar="20_energy_core.png" data-avatar-name="Energy Core">
+        <img src="icons/20_energy_core.png" alt="Energy Core">
+        <span>Energy Core</span>
+    </div>
 
+    <div class="avatar-option" data-avatar="21_ocean_drone.png" data-avatar-name="Ocean Drone">
+        <img src="icons/21_ocean_drone.png" alt="Ocean Drone">
+        <span>Ocean Drone</span>
+    </div>
 
-                <button
-                    class="avatar-option"
-                    data-avatar="layer3.png"
-                    type="button"
-                >
-                    <img
-                        src="../game/layer3.png"
-                        alt="Avatar"
-                    >
-                </button>
-
-            </div>
+</div>
 
 
             <button
@@ -1229,6 +1223,12 @@
             );
 
 
+        const avatarNameElement =
+            document.getElementById(
+                "avatarName"
+            );
+
+
         const accountButtonImage =
             document.getElementById(
                 "accountButtonImage"
@@ -1343,7 +1343,7 @@
             }
 
 
-            return "../game/" + avatar;
+            return "icons/" + avatar;
 
         }
 
@@ -1440,6 +1440,35 @@
                 currentProfile.avatar ||
                 "default";
 
+            const avatarNames = {
+                "01_space_explorer.png": "Space Explorer",
+                "02_seahorse.png": "Seahorse",
+                "03_octopus.png": "Octopus",
+                "04_sea_turtle.png": "Sea Turtle",
+                "05_jellyfish.png": "Jellyfish",
+                "06_shark.png": "Shark",
+                "07_starfish.png": "Starfish",
+                "08_moon.png": "Moon",
+                "09_ocean_queen.png": "Ocean Queen",
+                "10_submarine.png": "Submarine",
+                "11_crab.png": "Crab",
+                "12_manta_ray.png": "Manta Ray",
+                "13_coral_reef.png": "Coral Reef",
+                "14_galaxy.png": "Galaxy",
+                "15_angler_fish.png": "Angler Fish",
+                "16_alien_fish.png": "Alien Fish",
+                "17_whale.png": "Whale",
+                "18_ocean_king.png": "Ocean King",
+                "19_planet.png": "Planet",
+                "20_energy_core.png": "Energy Core",
+                "21_ocean_drone.png": "Ocean Drone"
+            };
+
+            const avatarName =
+                currentProfile.avatarName ||
+                avatarNames[avatar] ||
+                "Space Explorer";
+
 
             const music =
                 currentProfile.musicVolume ??
@@ -1453,6 +1482,12 @@
 
             accountName.textContent =
                 username;
+
+
+            if (avatarNameElement) {
+                avatarNameElement.textContent =
+                    avatarName;
+            }
 
 
             accountEmail.textContent =
@@ -1874,6 +1909,9 @@
                             const avatar =
                                 option.dataset.avatar;
 
+                            const avatarName =
+                                option.dataset.avatarName;
+
 
                             try {
 
@@ -1885,13 +1923,24 @@
                                     ),
                                     {
                                         avatar:
-                                            avatar
+                                            avatar,
+
+                                        avatarName:
+                                            avatarName
                                     }
                                 );
 
 
                                 currentProfile.avatar =
                                     avatar;
+
+                                currentProfile.avatarName =
+                                    avatarName;
+
+                                if (avatarNameElement) {
+                                    avatarNameElement.textContent =
+                                        avatarName;
+                                }
 
 
                                 const path =
