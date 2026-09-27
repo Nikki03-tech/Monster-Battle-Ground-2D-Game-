@@ -36,12 +36,12 @@ window.addEventListener('load', function () {
     const ctx = canvas.getContext('2d');
     canvas.width = 1000;
     canvas.height = 500;
-  
-  
+
+
     const upButton = document.getElementById('upButton');
     const downButton = document.getElementById('downButton');
     const shootButton = document.getElementById('shootButton');
-    
+
     class InputHandler {
         constructor(game) {
             this.game = game;
@@ -170,17 +170,17 @@ window.addEventListener('load', function () {
             this.frameX = Math.floor(Math.random() * 3);
             this.frameY = Math.floor(Math.random() * 3);
         }
-  
+
         update() {
             this.x += this.speed;
             if (this.x > this.game.width * 0.8) this.markedForDeletion = true;
         }
-  
+
         draw(context) {
             context.drawImage(this.image, this.x, this.y);
         }
     }
-  
+
     class Particle {
         constructor(game, x, y) {
             this.game = game;
@@ -201,7 +201,7 @@ window.addEventListener('load', function () {
             this.bounced = 0;
             this.bottomBounceBoundary = Math.random() * 80 + 60;
         }
-  
+
         update() {
             this.angle += this.va;
             this.speedY += this.gravity;
@@ -213,7 +213,7 @@ window.addEventListener('load', function () {
                 this.speedY *= -0.5;
             }
         }
-  
+
         draw(context) {
             context.save();
             context.translate(this.x, this.y);
@@ -240,28 +240,28 @@ window.addEventListener('load', function () {
           this.powerUpTimer = 0; // Timer for power-up duration
           this.powerUpLimit = 10000; // Duration of power-up in milliseconds
       }
-  
+
       update(deltaTime) {
           // Handle vertical movement
           if (this.game.keys.includes('ArrowUp')) this.speedY = -this.maxSpeed;
           else if (this.game.keys.includes('ArrowDown')) this.speedY = this.maxSpeed;
           else this.speedY = 0;
           this.y += this.speedY;
-  
+
           // Vertical boundaries
           if (this.y > this.game.height - this.height) this.y = this.game.height - this.height; // Bottom boundary
           else if (this.y < 0) this.y = 0; // Top boundary
-  
+
           // Update projectiles
           this.projectiles.forEach(projectile => {
               projectile.update();
           });
           this.projectiles = this.projectiles.filter(projectile => !projectile.markedForDeletion);
-  
+
           // Animate sprite
           if (this.frameX < this.maxFrame) this.frameX++;
           else this.frameX = 0;
-  
+
           // Handle power-up state
           if (this.powerUp) {
               if (this.powerUpTimer > this.powerUpLimit) {
@@ -275,16 +275,16 @@ window.addEventListener('load', function () {
               }
           }
       }
-  
+
       draw(context) {
           // Draw debug rectangle
           if (this.game.debug) context.strokeRect(this.x, this.y, this.width, this.height);
-  
+
           // Draw projectiles
           this.projectiles.forEach(projectile => {
               projectile.draw(context);
           });
-  
+
           // Draw player sprite
           context.drawImage(
               this.image,
@@ -298,7 +298,7 @@ window.addEventListener('load', function () {
               this.height // Destination height
           );
       }
-  
+
       shootTop() {
           if (this.game.ammo > 0) {
               this.projectiles.push(new Projectile(this.game, this.x + 80, this.y + 30));
@@ -306,20 +306,20 @@ window.addEventListener('load', function () {
           }
           if (this.powerUp) this.shootBottom(); // Shoot additional projectile if powered up
       }
-  
+
       shootBottom() {
           if (this.game.ammo > 0) {
               this.projectiles.push(new Projectile(this.game, this.x + 80, this.y + 175));
           }
       }
-  
+
       enterPowerUp() {
           this.powerUpTimer = 0;
           this.powerUp = true;
           if (this.game.ammo < this.game.maxAmmo) this.game.ammo = this.game.maxAmmo; // Replenish ammo
       }
   }
-  
+
     class Enemy {
         constructor(game) {
             this.game = game;
@@ -330,7 +330,7 @@ window.addEventListener('load', function () {
             this.frameY = 0;
             this.maxFrame = 37;
         }
-  
+
         update() {
             this.x += this.speedX - this.game.speed;
             if (this.x + this.width < 0) this.markedForDeletion = true;
@@ -338,7 +338,7 @@ window.addEventListener('load', function () {
                 this.frameX++;
             } else this.frameX = 0;
         }
-  
+
         draw(context) {
             if (this.game.debug) context.strokeRect(this.x, this.y, this.width, this.height);
             context.drawImage(this.image, this.frameX * this.width, this.frameY * this.height, this.width, this.height, this.x, this.y, this.width, this.height);
@@ -348,7 +348,7 @@ window.addEventListener('load', function () {
             }
         }
     }
-  
+
     class Angler1 extends Enemy {
         constructor(game) {
             super(game);
@@ -361,7 +361,7 @@ window.addEventListener('load', function () {
             this.score = this.lives;
         }
     }
-  
+
     class Angler2 extends Enemy {
         constructor(game) {
             super(game);
@@ -374,7 +374,7 @@ window.addEventListener('load', function () {
             this.score = this.lives;
         }
     }
-  
+
     class LuckyFish extends Enemy {
         constructor(game) {
             super(game);
@@ -388,7 +388,7 @@ window.addEventListener('load', function () {
             this.type = 'lucky';
         }
     }
-  
+
     class HiveWhale extends Enemy {
         constructor(game) {
             super(game);
@@ -403,7 +403,7 @@ window.addEventListener('load', function () {
             this.speedX = Math.random() * -1.2 - 0.2;
         }
     }
-  
+
     class Drone extends Enemy {
         constructor(game, x, y) {
             super(game);
@@ -419,12 +419,12 @@ window.addEventListener('load', function () {
             this.speedX = Math.random() * -4.2 - 0.5;
         }
     }
-  
+
     class Layer {
         constructor(game, image, speedModifier) {
             this.game = game;
             this.image = image;
-            this.speedModifier = speedModifier; 
+            this.speedModifier = speedModifier;
             this.width = 17768;
             this.height = 500;
             this.x = 0;
@@ -439,12 +439,12 @@ window.addEventListener('load', function () {
             context.drawImage(this.image, this.x + this.width, this.y);
         }
     }
-  
+
     class Background {
         constructor(game) {
             this.game = game;
             this.image1 = document.getElementById('layer1');
-            this.image2 = document.getElementById('layer2'); 
+            this.image2 = document.getElementById('layer2');
             this.image3 = document.getElementById('layer3');
             this.image4 = document.getElementById('layer4');
             this.layer1 = new Layer(this.game, this.image1, 0.2);
@@ -460,7 +460,7 @@ window.addEventListener('load', function () {
             this.layers.forEach(layer => layer.draw(context));
         }
     }
-  
+
     class Explosion {
       constructor(game, x, y) {
           this.game = game;
@@ -477,7 +477,7 @@ window.addEventListener('load', function () {
           this.markedForDeletion = false;
           this.maxFrame = 7; // Adjusted for 8 frames (0-7)
       }
-  
+
       update(deltaTime) {
           this.timer += deltaTime;
           while (this.timer > this.interval) {
@@ -486,7 +486,7 @@ window.addEventListener('load', function () {
           }
           if (this.frameX > this.maxFrame) this.markedForDeletion = true;
       }
-  
+
       draw(context) {
           context.drawImage(
               this.image,
@@ -501,21 +501,21 @@ window.addEventListener('load', function () {
           );
       }
   }
-  
+
   class SmokeExplosion extends Explosion {
       constructor(game, x, y) {
           super(game, x, y);
           this.image = document.getElementById('smokeExplosion');
       }
   }
-  
+
   class FireExplosion extends Explosion {
       constructor(game, x, y) {
           super(game, x, y);
           this.image = document.getElementById('fireExplosion');
       }
   }
-  
+
     class UI {
       constructor(game) {
           this.game = game;
@@ -523,7 +523,7 @@ window.addEventListener('load', function () {
           this.fontFamily = 'Bangers';
           this.color = 'white';
       }
-  
+
       draw(context) {
           context.save();
           context.fillStyle = this.color;
@@ -532,26 +532,26 @@ window.addEventListener('load', function () {
           context.shadowColor = 'black';
           context.font = `${this.fontSize}px ${this.fontFamily}`;
 
-  
+
           // Draw Score
           context.fillText('Score: ' + this.game.score, 20, 40);
-  
+
           // Draw Timer
           const formattedTime = (this.game.gameTime * 0.001).toFixed(1); // Convert milliseconds to seconds
           context.fillText('Timer: ' + formattedTime, 20, 70);
-  
+
           // Draw Ammo Bar
           if (this.game.player.powerUp) context.fillStyle = '#0000bd'; // Fix invalid color code
           for (let i = 0; i < this.game.ammo; i++) {
               context.fillRect(20 + 5 * i, 90, 3, 20); // Adjusted y-position to avoid overlap
           }
-  
+
           // Draw Game Over Message
           if (this.game.gameOver) {
               console.log('Game Over!'); // Debugging line
               console.log('Score:', this.game.score); // Debugging line
               console.log('Winning Score:', this.game.winningScore); // Debugging line
-  
+
               context.textAlign = 'center';
               let message1;
               let message2;
@@ -567,11 +567,11 @@ window.addEventListener('load', function () {
               context.font = '25px ' + this.fontFamily;
               context.fillText(message2, this.game.width * 0.5, this.game.height * 0.5 + 20);
           }
-  
+
           context.restore();
       }
   }
-    
+
     function createGameOverScreen(game) {
     const overlay = document.createElement('div');
 
@@ -607,7 +607,7 @@ window.addEventListener('load', function () {
     `;
 
     const box = overlay.querySelector('.game-over-box');
-    
+
     box.style.cssText = `
         text-align: center;
         background: rgba(5, 20, 70, 0.92);
@@ -620,7 +620,7 @@ window.addEventListener('load', function () {
     `;
 
     const title = overlay.querySelector('#gameOverTitle');
-    
+
     title.style.cssText = `
         color: #174cff;
         font-size: 48px;
@@ -631,7 +631,7 @@ window.addEventListener('load', function () {
     `;
 
     overlay.querySelectorAll('button').forEach(button => {
-    
+
         button.style.cssText = `
             padding: 12px 22px;
             margin: 5px;
@@ -646,7 +646,7 @@ window.addEventListener('load', function () {
         `;
     });
 
-   
+
 
     document.body.appendChild(overlay);
 
@@ -660,7 +660,7 @@ window.addEventListener('load', function () {
         });
 
 
-    
+
     // BACK TO WELCOME
         overlay.querySelector('#homeButton').addEventListener('click', () => {
             window.location.href = "../welcome/index.html";
@@ -746,7 +746,7 @@ function showGameOverScreen(game, won) {
 
     overlay.style.display = 'flex';
 }
-     
+
     class Game {
         constructor(width, height) {
             this.width = width;
@@ -762,12 +762,12 @@ function showGameOverScreen(game, won) {
             this.enemyTimer = 0;
             this.enemyInterval = 2000;
             this.ammo = 20;
-            this.maxAmmo = 50; 
+            this.maxAmmo = 50;
             this.ammoTimer = 0;
             this.ammoInterval = 350;
             this.gameOver = false;
             this.score = 0;
-            this.winningScore = 65; 
+            this.winningScore = 65;
             this.gameTime = 0;
             this.timeLimit = 30000;
             this.speed = 1;

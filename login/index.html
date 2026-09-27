@@ -104,26 +104,14 @@
 
 
         const firebaseConfig = {
-
-            apiKey:
-                "AIzaSyCU2wRnU-8O8Spk9AgUBBnjKMfE82GQ6Ds",
-
-            authDomain:
-                "monster-battle-ground.firebaseapp.com",
-
-            projectId:
-                "monster-battle-ground",
-
-            storageBucket:
-                "monster-battle-ground.firebasestorage.app",
-
-            messagingSenderId:
-                "569924636272",
-
-            appId:
-                "1:569924636272:web:7d99af119f2fd39dc12eb5"
-
-        };
+    apiKey: "AIzaSyCU2wRnU-8O8SPk9AgUBBnjKMfE82GQ6Ds",
+    authDomain: "monster-battle-ground.firebaseapp.com",
+    projectId: "monster-battle-ground",
+    storageBucket: "monster-battle-ground.firebasestorage.app",
+    messagingSenderId: "569924636272",
+    appId: "1:569924636272:web:7d99af119f2fd39dc12eb5",
+    measurementId: "G-Y9HEEBHBXT"
+};
 
 
         const app =
@@ -248,7 +236,8 @@
                     else {
 
                         loginMessage.textContent =
-                            "Login failed. Please try again.";
+                            "Firebase error: " +
+                            (error.code || error.message);
 
                     }
 
