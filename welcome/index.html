@@ -1,92 +1,863 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Monster Battle Ground</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Monster Battle Ground
+    </title>
+
 
     <style>
-        body, html {
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html,
+        body {
+
             margin: 0;
             padding: 0;
+
+            width: 100%;
             height: 100%;
+
             font-family: Arial, sans-serif;
+
             color: white;
+
             overflow: hidden;
         }
 
+
         .background {
-            background-image: url('wee.png');
-            background-size: 100% 100%;
-            background-position: center;
+
+            background-image:
+                url("wee.png");
+
+            background-size:
+                100% 100%;
+
+            background-position:
+                center;
+
+            width: 100%;
             height: 100%;
+
             display: flex;
+
             justify-content: center;
+
             align-items: center;
+
             flex-direction: column;
         }
 
+
         h1 {
+
             font-size: 3rem;
+
             margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+
+            text-align: center;
+
+            text-shadow:
+                2px 2px 5px black;
         }
+
 
         h2 {
+
             margin-bottom: 25px;
+
+            text-align: center;
         }
+
+
+        /* =====================================
+           MAIN BUTTONS
+        ===================================== */
 
         .buttons {
+
             display: flex;
+
             gap: 20px;
+
+            justify-content: center;
         }
 
-        button {
+
+        .buttons button {
+
             padding: 15px 30px;
+
             font-size: 1.2rem;
+
             color: white;
-            background-color: rgba(0, 0, 0, 0.5);
-            border: 2px solid white;
-            border-radius: 5px;
+
+            background:
+                rgba(0,0,0,.55);
+
+            border:
+                2px solid white;
+
+            border-radius: 7px;
+
             cursor: pointer;
-            transition: background-color 0.3s ease;
+
+            transition: .25s;
         }
 
-        button:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+
+        .buttons button:hover {
+
+            background:
+                rgba(255,255,255,.20);
+
+            transform:
+                translateY(-2px);
         }
 
-        #exitButton {
-            background-color: rgba(255, 0, 0, 0.5);
-        }
 
-        #exitButton:hover {
-            background-color: rgba(255, 0, 0, 0.7);
-        }
+        .buttons a {
 
-        button a {
             color: white;
+
             text-decoration: none;
         }
+
+
+        #exitButton {
+
+            background:
+                rgba(255,0,0,.55);
+        }
+
+
+        #exitButton:hover {
+
+            background:
+                rgba(255,0,0,.75);
+        }
+
+
+
+        /* =====================================
+           ACCOUNT BUTTON
+        ===================================== */
+
+        .account-menu {
+
+            position: absolute;
+
+            top: 25px;
+
+            right: 30px;
+
+            z-index: 1000;
+        }
+
+
+        #accountButton {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding:
+                6px 17px 6px 6px;
+
+            color: white;
+
+            background:
+                rgba(3,8,20,.78);
+
+            border:
+                1px solid white;
+
+            border-radius: 30px;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+            backdrop-filter:
+                blur(8px);
+        }
+
+
+        #accountButtonImage {
+
+            width: 38px;
+
+            height: 38px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            border:
+                2px solid white;
+        }
+
+
+
+        /* =====================================
+           ACCOUNT DROPDOWN
+        ===================================== */
+
+        .account-dropdown {
+
+            display: none;
+
+            position: absolute;
+
+            top: 58px;
+
+            right: 0;
+
+            width: 290px;
+
+            padding: 18px;
+
+            border-radius: 16px;
+
+            background:
+
+                radial-gradient(
+                    circle at 20% 20%,
+                    white 0 1px,
+                    transparent 2px
+                ),
+
+                radial-gradient(
+                    circle at 75% 35%,
+                    white 0 1px,
+                    transparent 2px
+                ),
+
+                linear-gradient(
+                    145deg,
+                    #06101f,
+                    #101d3c,
+                    #02050c
+                );
+
+            background-size:
+                100px 100px,
+                130px 130px,
+                100% 100%;
+
+            border:
+                1px solid
+                rgba(255,255,255,.35);
+
+            box-shadow:
+                0 15px 50px
+                rgba(0,0,0,.65);
+        }
+
+
+        .account-dropdown.show {
+
+            display: block;
+        }
+
+
+
+        /* =====================================
+           PROFILE
+        ===================================== */
+
+        .profile-header {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            padding-bottom: 15px;
+
+            margin-bottom: 13px;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.20);
+        }
+
+
+        .profile-picture-container {
+
+            position: relative;
+
+            width: 60px;
+
+            height: 60px;
+        }
+
+
+        #profileImage {
+
+            width: 60px;
+
+            height: 60px;
+
+            object-fit: cover;
+
+            border-radius: 50%;
+
+            border:
+                2px solid white;
+        }
+
+
+        .edit-profile-button {
+
+            position: absolute;
+
+            right: -5px;
+
+            bottom: -4px;
+
+            width: 25px;
+
+            height: 25px;
+
+            padding: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 12px;
+
+            background:
+                #14213d;
+
+            border:
+                2px solid white;
+
+            border-radius: 50%;
+
+            cursor: pointer;
+        }
+
+
+        .profile-name {
+
+            font-size: 17px;
+
+            font-weight: bold;
+        }
+
+
+        .profile-email {
+
+            font-size: 12px;
+
+            color:
+                rgba(255,255,255,.65);
+
+            word-break: break-all;
+        }
+
+
+
+        /* =====================================
+           EDIT USERNAME
+        ===================================== */
+
+        .edit-username-button,
+        .my-game-link {
+
+            width: 100%;
+
+            display: block;
+
+            padding: 11px;
+
+            margin-bottom: 12px;
+
+            color: white;
+
+            background:
+                rgba(255,255,255,.09);
+
+            border:
+                1px solid
+                rgba(255,255,255,.25);
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            text-decoration: none;
+
+            text-align: left;
+
+            font-size: 14px;
+        }
+
+
+        .edit-username-button:hover,
+        .my-game-link:hover {
+
+            background:
+                rgba(255,255,255,.18);
+        }
+
+
+
+        /* =====================================
+           VOLUME
+        ===================================== */
+
+        .volume-control {
+
+            margin: 14px 4px;
+        }
+
+
+        .volume-title {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-bottom: 7px;
+
+            font-size: 14px;
+        }
+
+
+        .volume-control input {
+
+            width: 100%;
+        }
+
+
+
+        /* =====================================
+           LOGOUT
+        ===================================== */
+
+        #logoutButton {
+
+            width: 100%;
+
+            padding: 11px;
+
+            color: white;
+
+            background:
+                rgba(180,30,30,.75);
+
+            border:
+                1px solid
+                rgba(255,255,255,.5);
+
+            border-radius: 8px;
+
+            cursor: pointer;
+        }
+
+
+
+        /* =====================================
+           POPUPS
+        ===================================== */
+
+        .popup-overlay {
+
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 3000;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+            background:
+                rgba(0,0,15,.78);
+
+            backdrop-filter:
+                blur(8px);
+        }
+
+
+        .popup-overlay.show {
+
+            display: flex;
+        }
+
+
+        .popup-box {
+
+            width:
+                min(620px,95%);
+
+            max-height: 85vh;
+
+            overflow-y: auto;
+
+            padding: 25px;
+
+            border-radius: 20px;
+
+            background:
+
+                radial-gradient(
+                    circle at 20% 20%,
+                    white 0 1px,
+                    transparent 2px
+                ),
+
+                radial-gradient(
+                    circle at 80% 30%,
+                    white 0 1px,
+                    transparent 2px
+                ),
+
+                linear-gradient(
+                    145deg,
+                    #07111f,
+                    #101b38,
+                    #030711
+                );
+
+            box-shadow:
+                0 20px 60px
+                rgba(0,0,0,.7);
+        }
+
+
+        .popup-title {
+
+            text-align: center;
+        }
+
+
+        .popup-subtitle {
+
+            text-align: center;
+
+            color:
+                rgba(255,255,255,.65);
+        }
+
+
+
+        /* =====================================
+           AVATAR
+        ===================================== */
+
+        .avatar-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4,1fr);
+
+            gap: 14px;
+
+            margin-top: 20px;
+        }
+
+
+        .avatar-option {
+
+            width: 100%;
+
+            aspect-ratio: 1;
+
+            padding: 6px;
+
+            background:
+                rgba(255,255,255,.08);
+
+            border:
+                2px solid transparent;
+
+            border-radius: 13px;
+
+            cursor: pointer;
+        }
+
+
+        .avatar-option:hover {
+
+            border-color: white;
+
+            background:
+                rgba(255,255,255,.18);
+        }
+
+
+        .avatar-option img {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+            border-radius: 9px;
+        }
+
+
+        .close-button {
+
+            display: block;
+
+            margin: 20px auto 0;
+
+            padding: 10px 25px;
+
+            color: white;
+
+            background:
+                rgba(180,30,30,.75);
+
+            border:
+                1px solid white;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+        }
+
+
+
+        /* =====================================
+           USERNAME INPUT
+        ===================================== */
+
+        #usernameInput {
+
+            width: 100%;
+
+            padding: 12px;
+
+            color: white;
+
+            background:
+                rgba(0,0,0,.45);
+
+            border:
+                1px solid
+                rgba(255,255,255,.4);
+
+            border-radius: 8px;
+
+            font-size: 16px;
+        }
+
+
+        .popup-actions {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 10px;
+
+            margin-top: 15px;
+        }
+
+
+        .popup-actions button {
+
+            padding: 10px 25px;
+
+            color: white;
+
+            background:
+                rgba(255,255,255,.12);
+
+            border:
+                1px solid white;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+        }
+
     </style>
+
 </head>
+
 
 <body>
 
-    <div class="background">
 
-        <h1 id="welcomeMessage">Welcome!!</h1>
+    <!-- =====================================
+         ACCOUNT
+    ===================================== -->
 
-        <h2>Press Start to Play the game</h2>
+    <div class="account-menu">
 
-        <div class="buttons">
+        <button
+            id="accountButton"
+            type="button"
+        >
 
-            <button id="startButton">
-                <a href="../game/game.html">Start</a>
+            <img
+                id="accountButtonImage"
+                src="../signup/iop1.png"
+                alt="Profile"
+            >
+
+            Account
+
+        </button>
+
+
+        <div
+            id="accountDropdown"
+            class="account-dropdown"
+        >
+
+
+            <div class="profile-header">
+
+                <div class="profile-picture-container">
+
+                    <img
+                        id="profileImage"
+                        src="../signup/iop1.png"
+                        alt="Profile"
+                    >
+
+
+                    <button
+                        id="editProfileButton"
+                        class="edit-profile-button"
+                        type="button"
+                    >
+                        ✏️
+                    </button>
+
+                </div>
+
+
+                <div>
+
+                    <div
+                        id="accountName"
+                        class="profile-name"
+                    >
+                        Player
+                    </div>
+
+
+                    <div
+                        id="accountEmail"
+                        class="profile-email"
+                    >
+                        Loading...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="editUsernameButton"
+                class="edit-username-button"
+                type="button"
+            >
+                ✏️ Edit Username
             </button>
 
-            <button id="exitButton">
-                <a href="../home/index.html">Exit</a>
+
+            <a
+                href="my-game.html"
+                class="my-game-link"
+            >
+                🎮 My Game
+            </a>
+
+
+            <div class="volume-control">
+
+                <div class="volume-title">
+
+                    <span>
+                        🎵 Music
+                    </span>
+
+                    <span id="musicValue">
+                        100%
+                    </span>
+
+                </div>
+
+
+                <input
+                    id="musicVolume"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="100"
+                >
+
+            </div>
+
+
+            <div class="volume-control">
+
+                <div class="volume-title">
+
+                    <span>
+                        🔊 Sound
+                    </span>
+
+                    <span id="soundValue">
+                        100%
+                    </span>
+
+                </div>
+
+
+                <input
+                    id="soundVolume"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="100"
+                >
+
+            </div>
+
+
+            <button
+                id="logoutButton"
+                type="button"
+            >
+                🚪 Logout
             </button>
 
         </div>
@@ -94,58 +865,1236 @@
     </div>
 
 
+
+    <!-- =====================================
+         WELCOME PAGE
+    ===================================== -->
+
+    <div class="background">
+
+        <h1 id="welcomeMessage">
+            Loading...
+        </h1>
+
+
+        <h2>
+            Press Start to Play the game
+        </h2>
+
+
+        <div class="buttons">
+
+            <button>
+
+                <a href="../game/game.html">
+                    Start
+                </a>
+
+            </button>
+
+
+            <button id="exitButton">
+
+                <a href="../home/index.html">
+                    Exit
+                </a>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================
+         AVATAR POPUP
+    ===================================== -->
+
+    <div
+        id="avatarOverlay"
+        class="popup-overlay"
+    >
+
+        <div class="popup-box">
+
+            <h2 class="popup-title">
+                Choose Your Avatar
+            </h2>
+
+
+            <p class="popup-subtitle">
+                Choose your Ocean + Space avatar
+            </p>
+
+
+            <div class="avatar-grid">
+
+
+                <button
+                    class="avatar-option"
+                    data-avatar="player.png"
+                    type="button"
+                >
+                    <img
+                        src="../game/player.png"
+                        alt="Avatar"
+                    >
+                </button>
+
+
+                <button
+                    class="avatar-option"
+                    data-avatar="angler1.png"
+                    type="button"
+                >
+                    <img
+                        src="../game/angler1.png"
+                        alt="Avatar"
+                    >
+                </button>
+
+
+                <button
+                    class="avatar-option"
+                    data-avatar="angler2.png"
+                    type="button"
+                >
+                    <img
+                        src="../game/angler2.png"
+                        alt="Avatar"
+                    >
+                </button>
+
+
+                <button
+                    class="avatar-option"
+                    data-avatar="drone.png"
+                    type="button"
+                >
+                    <img
+                        src="../game/drone.png"
+                        alt="Avatar"
+                    >
+                </button>
+
+
+                <button
+                    class="avatar-option"
+                    data-avatar="hivewhale.png"
+                    type="button"
+                >
+                    <img
+                        src="../game/hivewhale.png"
+                        alt="Avatar"
+                    >
+                </button>
+
+
+                <button
+                    class="avatar-option"
+                    data-avatar="lucky.png"
+                    type="button"
+                >
+                    <img
+                        src="../game/lucky.png"
+                        alt="Avatar"
+                    >
+                </button>
+
+
+                <button
+                    class="avatar-option"
+                    data-avatar="gears.png"
+                    type="button"
+                >
+                    <img
+                        src="../game/gears.png"
+                        alt="Avatar"
+                    >
+                </button>
+
+
+                <button
+                    class="avatar-option"
+                    data-avatar="projectile.png"
+                    type="button"
+                >
+                    <img
+                        src="../game/projectile.png"
+                        alt="Avatar"
+                    >
+                </button>
+
+
+                <button
+                    class="avatar-option"
+                    data-avatar="layer1.png"
+                    type="button"
+                >
+                    <img
+                        src="../game/layer1.png"
+                        alt="Avatar"
+                    >
+                </button>
+
+
+                <button
+                    class="avatar-option"
+                    data-avatar="layer2.png"
+                    type="button"
+                >
+                    <img
+                        src="../game/layer2.png"
+                        alt="Avatar"
+                    >
+                </button>
+
+
+                <button
+                    class="avatar-option"
+                    data-avatar="layer3.png"
+                    type="button"
+                >
+                    <img
+                        src="../game/layer3.png"
+                        alt="Avatar"
+                    >
+                </button>
+
+            </div>
+
+
+            <button
+                id="closeAvatarButton"
+                class="close-button"
+                type="button"
+            >
+                Close
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================
+         USERNAME POPUP
+    ===================================== -->
+
+    <div
+        id="usernameOverlay"
+        class="popup-overlay"
+    >
+
+        <div class="popup-box">
+
+            <h2 class="popup-title">
+                Change Username
+            </h2>
+
+
+            <p class="popup-subtitle">
+                Choose your username
+            </p>
+
+
+            <input
+                id="usernameInput"
+                type="text"
+                maxlength="30"
+                placeholder="Enter username"
+            >
+
+
+            <div class="popup-actions">
+
+                <button
+                    id="saveUsernameButton"
+                    type="button"
+                >
+                    Save
+                </button>
+
+
+                <button
+                    id="cancelUsernameButton"
+                    type="button"
+                >
+                    Cancel
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================
+         FIREBASE
+    ===================================== -->
+
     <script type="module">
 
-        import { initializeApp }
-            from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+        import {
+            initializeApp
+        } from
+        "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+
 
         import {
             getAuth,
-            onAuthStateChanged
-        }
-            from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+            onAuthStateChanged,
+            updateProfile,
+            signOut
+        } from
+        "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
+
+        import {
+            getFirestore,
+            doc,
+            getDoc,
+            setDoc,
+            updateDoc
+        } from
+        "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+
+
+        /* =====================================
+           FIREBASE CONFIG
+        ===================================== */
 
         const firebaseConfig = {
-            apiKey: "AIzaSyCU2wRnU-8O8SPk9AgUBBnjKMfE82GQ6Ds",
-            authDomain: "monster-battle-ground.firebaseapp.com",
-            projectId: "monster-battle-ground",
-            storageBucket: "monster-battle-ground.firebasestorage.app",
-            messagingSenderId: "569924636272",
-            appId: "1:569924636272:web:7d99af119f2fd39dc12eb5"
+
+            apiKey:
+                "AIzaSyCU2wRnU-8O8Sp9kAgUBBnjKMfE82GQ6Ds",
+
+            authDomain:
+                "monster-battle-ground.firebaseapp.com",
+
+            projectId:
+                "monster-battle-ground",
+
+            storageBucket:
+                "monster-battle-ground.firebasestorage.app",
+
+            messagingSenderId:
+                "569924636272",
+
+            appId:
+                "1:569924636272:web:7d99af119f2fd39dc12eb5"
+
         };
 
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+        const app =
+            initializeApp(firebaseConfig);
 
+
+        const auth =
+            getAuth(app);
+
+
+        const db =
+            getFirestore(app);
+
+
+
+        /* =====================================
+           ELEMENTS
+        ===================================== */
 
         const welcomeMessage =
-            document.getElementById("welcomeMessage");
+            document.getElementById(
+                "welcomeMessage"
+            );
 
 
-        onAuthStateChanged(auth, (user) => {
+        const accountButton =
+            document.getElementById(
+                "accountButton"
+            );
 
-            if (user) {
 
-                const name = user.displayName || "Player";
+        const accountDropdown =
+            document.getElementById(
+                "accountDropdown"
+            );
 
-                const params = new URLSearchParams(window.location.search);
-                const returning = params.get("returning") === "true";
 
-                welcomeMessage.textContent = returning
-                    ? `Welcome back, ${name} 👋`
-                    : `Welcome, ${name} 👋`;
+        const accountName =
+            document.getElementById(
+                "accountName"
+            );
 
-            } else {
 
-                window.location.href = "../login/index.html";
+        const accountEmail =
+            document.getElementById(
+                "accountEmail"
+            );
+
+
+        const accountButtonImage =
+            document.getElementById(
+                "accountButtonImage"
+            );
+
+
+        const profileImage =
+            document.getElementById(
+                "profileImage"
+            );
+
+
+        const editProfileButton =
+            document.getElementById(
+                "editProfileButton"
+            );
+
+
+        const editUsernameButton =
+            document.getElementById(
+                "editUsernameButton"
+            );
+
+
+        const usernameOverlay =
+            document.getElementById(
+                "usernameOverlay"
+            );
+
+
+        const usernameInput =
+            document.getElementById(
+                "usernameInput"
+            );
+
+
+        const saveUsernameButton =
+            document.getElementById(
+                "saveUsernameButton"
+            );
+
+
+        const cancelUsernameButton =
+            document.getElementById(
+                "cancelUsernameButton"
+            );
+
+
+        const avatarOverlay =
+            document.getElementById(
+                "avatarOverlay"
+            );
+
+
+        const closeAvatarButton =
+            document.getElementById(
+                "closeAvatarButton"
+            );
+
+
+        const musicVolume =
+            document.getElementById(
+                "musicVolume"
+            );
+
+
+        const soundVolume =
+            document.getElementById(
+                "soundVolume"
+            );
+
+
+        const musicValue =
+            document.getElementById(
+                "musicValue"
+            );
+
+
+        const soundValue =
+            document.getElementById(
+                "soundValue"
+            );
+
+
+        const logoutButton =
+            document.getElementById(
+                "logoutButton"
+            );
+
+
+        let currentUser = null;
+
+        let currentProfile = null;
+
+
+
+        /* =====================================
+           AVATAR PATH
+        ===================================== */
+
+        function getAvatarPath(
+            avatar
+        ) {
+
+            if (
+                !avatar ||
+                avatar === "default"
+            ) {
+
+                return "../signup/iop1.png";
 
             }
 
-        });
+
+            return "../game/" + avatar;
+
+        }
+
+
+
+        /* =====================================
+           LOAD PROFILE
+        ===================================== */
+
+        async function loadProfile(
+            user
+        ) {
+
+            const userRef =
+                doc(
+                    db,
+                    "users",
+                    user.uid
+                );
+
+
+            const snapshot =
+                await getDoc(
+                    userRef
+                );
+
+
+            if (
+                snapshot.exists()
+            ) {
+
+                currentProfile =
+                    snapshot.data();
+
+            }
+
+            else {
+
+                currentProfile = {
+
+                    username:
+                        user.displayName ||
+                        "Player",
+
+                    email:
+                        user.email || "",
+
+                    avatar:
+                        "default",
+
+                    musicVolume:
+                        100,
+
+                    soundVolume:
+                        100
+
+                };
+
+
+                await setDoc(
+                    userRef,
+                    currentProfile,
+                    {
+                        merge: true
+                    }
+                );
+
+            }
+
+
+            updateProfileUI(
+                user
+            );
+
+        }
+
+
+
+        /* =====================================
+           UPDATE PROFILE UI
+        ===================================== */
+
+        function updateProfileUI(
+            user
+        ) {
+
+            const username =
+                currentProfile.username ||
+                user.displayName ||
+                "Player";
+
+
+            const avatar =
+                currentProfile.avatar ||
+                "default";
+
+
+            const music =
+                currentProfile.musicVolume ??
+                100;
+
+
+            const sound =
+                currentProfile.soundVolume ??
+                100;
+
+
+            accountName.textContent =
+                username;
+
+
+            accountEmail.textContent =
+                user.email || "";
+
+
+            const returning =
+                new URLSearchParams(
+                    window.location.search
+                ).get("returning") === "true";
+
+
+            welcomeMessage.textContent =
+                returning
+
+                    ? `Welcome back, ${username} 👋`
+
+                    : `Welcome, ${username} 👋`;
+
+
+            const avatarPath =
+                getAvatarPath(
+                    avatar
+                );
+
+
+            profileImage.src =
+                avatarPath;
+
+
+            accountButtonImage.src =
+                avatarPath;
+
+
+            musicVolume.value =
+                music;
+
+
+            soundVolume.value =
+                sound;
+
+
+            musicValue.textContent =
+                music + "%";
+
+
+            soundValue.textContent =
+                sound + "%";
+
+        }
+
+
+
+        /* =====================================
+           IMPORTANT AUTH CHECK
+        ===================================== */
+
+        onAuthStateChanged(
+            auth,
+            async (user) => {
+
+                /*
+                 * Firebase has now finished
+                 * checking the login.
+                 */
+
+                if (!user) {
+
+                    /*
+                     * Only now do we redirect.
+                     */
+
+                    window.location.replace(
+                        "../login/index.html"
+                    );
+
+                    return;
+
+                }
+
+
+                currentUser =
+                    user;
+
+
+                try {
+
+                    await loadProfile(
+                        user
+                    );
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "Profile error:",
+                        error
+                    );
+
+
+                    /*
+                     * Even if Firestore has a
+                     * temporary problem, DON'T
+                     * kick the logged-in user
+                     * back to Login.
+                     */
+
+                    currentProfile = {
+
+                        username:
+                            user.displayName ||
+                            "Player",
+
+                        avatar:
+                            "default",
+
+                        musicVolume:
+                            100,
+
+                        soundVolume:
+                            100
+
+                    };
+
+
+                    updateProfileUI(
+                        user
+                    );
+
+                }
+
+            }
+        );
+
+
+
+        /* =====================================
+           ACCOUNT BUTTON
+        ===================================== */
+
+        accountButton.addEventListener(
+            "click",
+            (event) => {
+
+                event.stopPropagation();
+
+                accountDropdown.classList.toggle(
+                    "show"
+                );
+
+            }
+        );
+
+
+        document.addEventListener(
+            "click",
+            (event) => {
+
+                if (
+
+                    !accountDropdown.contains(
+                        event.target
+                    )
+
+                    &&
+
+                    !accountButton.contains(
+                        event.target
+                    )
+
+                ) {
+
+                    accountDropdown.classList.remove(
+                        "show"
+                    );
+
+                }
+
+            }
+        );
+
+
+
+        /* =====================================
+           USERNAME
+        ===================================== */
+
+        editUsernameButton.addEventListener(
+            "click",
+            () => {
+
+                if (!currentUser) {
+                    return;
+                }
+
+
+                usernameInput.value =
+                    currentProfile.username ||
+                    currentUser.displayName ||
+                    "";
+
+
+                usernameOverlay.classList.add(
+                    "show"
+                );
+
+
+                usernameInput.focus();
+
+            }
+        );
+
+
+        saveUsernameButton.addEventListener(
+            "click",
+            async () => {
+
+                const newUsername =
+                    usernameInput.value.trim();
+
+
+                if (
+                    newUsername.length < 2
+                ) {
+
+                    alert(
+                        "Username must have at least 2 characters."
+                    );
+
+                    return;
+
+                }
+
+
+                try {
+
+                    saveUsernameButton.disabled =
+                        true;
+
+
+                    await updateProfile(
+                        currentUser,
+                        {
+                            displayName:
+                                newUsername
+                        }
+                    );
+
+
+                    await updateDoc(
+                        doc(
+                            db,
+                            "users",
+                            currentUser.uid
+                        ),
+                        {
+                            username:
+                                newUsername
+                        }
+                    );
+
+
+                    currentProfile.username =
+                        newUsername;
+
+
+                    accountName.textContent =
+                        newUsername;
+
+
+                    welcomeMessage.textContent =
+                        `Welcome, ${newUsername} 👋`;
+
+
+                    usernameOverlay.classList.remove(
+                        "show"
+                    );
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "Username error:",
+                        error
+                    );
+
+
+                    alert(
+                        "Unable to change username."
+                    );
+
+                }
+
+                finally {
+
+                    saveUsernameButton.disabled =
+                        false;
+
+                }
+
+            }
+        );
+
+
+        cancelUsernameButton.addEventListener(
+            "click",
+            () => {
+
+                usernameOverlay.classList.remove(
+                    "show"
+                );
+
+            }
+        );
+
+
+
+        /* =====================================
+           AVATAR
+        ===================================== */
+
+        editProfileButton.addEventListener(
+            "click",
+            () => {
+
+                avatarOverlay.classList.add(
+                    "show"
+                );
+
+            }
+        );
+
+
+        document
+            .querySelectorAll(".avatar-option")
+            .forEach(
+                (option) => {
+
+                    option.addEventListener(
+                        "click",
+                        async () => {
+
+                            if (!currentUser) {
+                                return;
+                            }
+
+
+                            const avatar =
+                                option.dataset.avatar;
+
+
+                            try {
+
+                                await updateDoc(
+                                    doc(
+                                        db,
+                                        "users",
+                                        currentUser.uid
+                                    ),
+                                    {
+                                        avatar:
+                                            avatar
+                                    }
+                                );
+
+
+                                currentProfile.avatar =
+                                    avatar;
+
+
+                                const path =
+                                    getAvatarPath(
+                                        avatar
+                                    );
+
+
+                                profileImage.src =
+                                    path;
+
+
+                                accountButtonImage.src =
+                                    path;
+
+
+                                avatarOverlay.classList.remove(
+                                    "show"
+                                );
+
+                            }
+
+                            catch (error) {
+
+                                console.error(
+                                    "Avatar error:",
+                                    error
+                                );
+
+
+                                alert(
+                                    "Unable to change avatar."
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+
+        closeAvatarButton.addEventListener(
+            "click",
+            () => {
+
+                avatarOverlay.classList.remove(
+                    "show"
+                );
+
+            }
+        );
+
+
+
+        /* =====================================
+           MUSIC
+        ===================================== */
+
+        musicVolume.addEventListener(
+            "input",
+            () => {
+
+                musicValue.textContent =
+                    musicVolume.value + "%";
+
+            }
+        );
+
+
+        musicVolume.addEventListener(
+            "change",
+            async () => {
+
+                if (!currentUser) {
+                    return;
+                }
+
+
+                const value =
+                    Number(
+                        musicVolume.value
+                    );
+
+
+                try {
+
+                    await updateDoc(
+                        doc(
+                            db,
+                            "users",
+                            currentUser.uid
+                        ),
+                        {
+                            musicVolume:
+                                value
+                        }
+                    );
+
+
+                    currentProfile.musicVolume =
+                        value;
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "Music volume error:",
+                        error
+                    );
+
+                }
+
+            }
+        );
+
+
+
+        /* =====================================
+           SOUND
+        ===================================== */
+
+        soundVolume.addEventListener(
+            "input",
+            () => {
+
+                soundValue.textContent =
+                    soundVolume.value + "%";
+
+            }
+        );
+
+
+        soundVolume.addEventListener(
+            "change",
+            async () => {
+
+                if (!currentUser) {
+                    return;
+                }
+
+
+                const value =
+                    Number(
+                        soundVolume.value
+                    );
+
+
+                try {
+
+                    await updateDoc(
+                        doc(
+                            db,
+                            "users",
+                            currentUser.uid
+                        ),
+                        {
+                            soundVolume:
+                                value
+                        }
+                    );
+
+
+                    currentProfile.soundVolume =
+                        value;
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "Sound volume error:",
+                        error
+                    );
+
+                }
+
+            }
+        );
+
+
+
+        /* =====================================
+           LOGOUT
+        ===================================== */
+
+        logoutButton.addEventListener(
+            "click",
+            async () => {
+
+                try {
+
+                    await signOut(
+                        auth
+                    );
+
+
+                    window.location.replace(
+                        "../login/index.html"
+                    );
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "Logout error:",
+                        error
+                    );
+
+                }
+
+            }
+        );
+
+
+
+        /* =====================================
+           CLOSE POPUPS
+        ===================================== */
+
+        avatarOverlay.addEventListener(
+            "click",
+            (event) => {
+
+                if (
+                    event.target ===
+                    avatarOverlay
+                ) {
+
+                    avatarOverlay.classList.remove(
+                        "show"
+                    );
+
+                }
+
+            }
+        );
+
+
+        usernameOverlay.addEventListener(
+            "click",
+            (event) => {
+
+                if (
+                    event.target ===
+                    usernameOverlay
+                ) {
+
+                    usernameOverlay.classList.remove(
+                        "show"
+                    );
+
+                }
+
+            }
+        );
 
     </script>
 
 </body>
+
 </html>

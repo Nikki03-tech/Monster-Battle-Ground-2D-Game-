@@ -1,183 +1,377 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register</title>
 
-  <link rel="stylesheet" href="styless.css">
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Monster Battle Ground - Sign Up</title>
+
+    <link rel="stylesheet" href="styless.css">
+
 </head>
+
 
 <body>
 
-  <div class="wrapper">
+    <div class="container">
 
-    <form id="signupForm">
+        <h1>Create Account</h1>
 
-      <h1>Signup</h1>
 
-      <div class="input-box">
-        <input
-          type="text"
-          id="username"
-          placeholder="username"
-          required
-        >
-        <i class="bx bxs-user"></i>
-      </div>
+        <form id="signupForm">
 
-      <div class="input-box">
-        <input
-          type="email"
-          id="email"
-          placeholder="Enter Your Gmail"
-          required
-        >
-        <i class="bx bxs-envelope"></i>
-      </div>
 
-      <div class="input-box">
-        <input
-          type="password"
-          id="password"
-          placeholder="Password"
-          required
-        >
-        <i class="bx bxs-lock-alt"></i>
-      </div>
+            <input
+                type="text"
+                id="username"
+                placeholder="Username"
+                required
+            >
 
-      <div class="remember-forgot">
-        <label>
-          <input type="checkbox" id="rememberMe">
-          Remember Me
-        </label>
 
-        <a href="#">Forgot Password</a>
-      </div>
+            <input
+                type="email"
+                id="email"
+                placeholder="Email"
+                required
+            >
 
-      <button type="submit" class="btn">
-        Signup
-      </button>
 
-      <div class="register-link">
+            <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                required
+            >
+
+
+            <label>
+
+                <input
+                    type="checkbox"
+                    id="rememberMe"
+                    checked
+                >
+
+                Remember Me
+
+            </label>
+
+
+            <button type="submit">
+                Sign Up
+            </button>
+
+
+            <p id="signupMessage"></p>
+
+        </form>
+
+
         <p>
-          Already have an account?
-          <a href="../login/index.html">Login</a>
+
+            Already have an account?
+
+            <a href="../login/index.html">
+                Login
+            </a>
+
         </p>
-      </div>
 
-      <p id="signupMessage"></p>
-
-    </form>
-
-  </div>
+    </div>
 
 
-  <!-- Firebase -->
-  <script type="module">
 
-    import { initializeApp }
-      from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+    <script type="module">
 
-    import {
-      getAuth,
-      createUserWithEmailAndPassword,
-      updateProfile
-    }
-    from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+        import {
+            initializeApp
+        } from
+        "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 
 
-    // YOUR FIREBASE CONFIG
-    const firebaseConfig = {
-      apiKey: "AIzaSyCU2wRnU-8O8SPk9AgUBBnjKMfE82GQ6Ds",
-      authDomain: "monster-battle-ground.firebaseapp.com",
-      projectId: "monster-battle-ground",
-      storageBucket: "monster-battle-ground.firebasestorage.app",
-      messagingSenderId: "569924636272",
-      appId: "1:569924636272:web:7d99af119f2fd39dc12eb5"
-    };
+        import {
+            getAuth,
+            createUserWithEmailAndPassword,
+            updateProfile,
+            setPersistence,
+            browserLocalPersistence
+        } from
+        "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+        import {
+            getFirestore,
+            doc,
+            setDoc,
+            serverTimestamp
+        } from
+        "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
 
-    // Signup
-    const signupForm = document.getElementById("signupForm");
-    const message = document.getElementById("signupMessage");
+
+        /* =========================================
+           FIREBASE
+        ========================================= */
+
+        const firebaseConfig = {
+
+            apiKey:
+                "AIzaSyCU2wRnU-8O8Spk9AgUBBnjKMfE82GQ6Ds",
+
+            authDomain:
+                "monster-battle-ground.firebaseapp.com",
+
+            projectId:
+                "monster-battle-ground",
+
+            storageBucket:
+                "monster-battle-ground.firebasestorage.app",
+
+            messagingSenderId:
+                "569924636272",
+
+            appId:
+                "1:569924636272:web:7d99af119f2fd39dc12eb5"
+
+        };
 
 
-    signupForm.addEventListener("submit", async (event) => {
-
-      event.preventDefault();
-
-      const username =
-        document.getElementById("username").value.trim();
-
-      const email =
-        document.getElementById("email").value.trim();
-
-      const password =
-        document.getElementById("password").value;
+        const app =
+            initializeApp(firebaseConfig);
 
 
-      message.textContent = "Creating your account...";
+        const auth =
+            getAuth(app);
 
 
-      try {
-
-        const userCredential =
-          await createUserWithEmailAndPassword(
-            auth,
-            email,
-            password
-          );
+        const db =
+            getFirestore(app);
 
 
-        // Save username to Firebase user profile
-        await updateProfile(userCredential.user, {
-          displayName: username
-        });
+
+        /* =========================================
+           ELEMENTS
+        ========================================= */
+
+        const signupForm =
+            document.getElementById(
+                "signupForm"
+            );
 
 
-        message.textContent =
-          "Account created successfully!";
+        const usernameInput =
+            document.getElementById(
+                "username"
+            );
 
 
-        // Go to Welcome page
-        setTimeout(() => {
-          window.location.href = "../welcome/index.html?returning=false";
-        }, 800);
+        const emailInput =
+            document.getElementById(
+                "email"
+            );
 
 
-      } catch (error) {
+        const passwordInput =
+            document.getElementById(
+                "password"
+            );
 
-        console.error(error);
 
-        if (error.code === "auth/email-already-in-use") {
-          message.textContent =
-            "This email is already registered.";
-        }
-        else if (error.code === "auth/invalid-email") {
-          message.textContent =
-            "Please enter a valid email address.";
-        }
-        else if (error.code === "auth/weak-password") {
-          message.textContent =
-            "Password should be at least 6 characters.";
-        }
-        else {
-          message.textContent =
-            "Signup failed. Please try again.";
-        }
+        const signupMessage =
+            document.getElementById(
+                "signupMessage"
+            );
 
-      }
 
-    });
 
-  </script>
+        /* =========================================
+           SIGN UP
+        ========================================= */
+
+        signupForm.addEventListener(
+            "submit",
+            async (event) => {
+
+                event.preventDefault();
+
+
+                const username =
+                    usernameInput.value.trim();
+
+
+                const email =
+                    emailInput.value.trim();
+
+
+                const password =
+                    passwordInput.value;
+
+
+                if (username.length < 2) {
+
+                    signupMessage.textContent =
+                        "Username must have at least 2 characters.";
+
+                    return;
+
+                }
+
+
+                signupMessage.textContent =
+                    "Creating your account...";
+
+
+                try {
+
+                    /*
+                     * Keep login active after signup.
+                     */
+
+                    await setPersistence(
+                        auth,
+                        browserLocalPersistence
+                    );
+
+
+                    /*
+                     * CREATE FIREBASE ACCOUNT
+                     */
+
+                    const userCredential =
+                        await createUserWithEmailAndPassword(
+                            auth,
+                            email,
+                            password
+                        );
+
+
+                    const user =
+                        userCredential.user;
+
+
+
+                    /*
+                     * SAVE USERNAME TO FIREBASE AUTH
+                     */
+
+                    await updateProfile(
+                        user,
+                        {
+                            displayName:
+                                username
+                        }
+                    );
+
+
+
+                    /*
+                     * CREATE FIRESTORE PROFILE
+                     */
+
+                    await setDoc(
+                        doc(
+                            db,
+                            "users",
+                            user.uid
+                        ),
+                        {
+
+                            username:
+                                username,
+
+                            email:
+                                email,
+
+                            avatar:
+                                "default",
+
+                            musicVolume:
+                                100,
+
+                            soundVolume:
+                                100,
+
+                            createdAt:
+                                serverTimestamp()
+
+                        }
+                    );
+
+
+
+                    signupMessage.textContent =
+                        "Account created successfully!";
+
+
+                    /*
+                     * Go directly to Welcome.
+                     */
+
+                    window.location.replace(
+                        "../welcome/index.html?returning=false"
+                    );
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "Signup error:",
+                        error
+                    );
+
+
+                    if (
+                        error.code ===
+                        "auth/email-already-in-use"
+                    ) {
+
+                        signupMessage.textContent =
+                            "This email already has an account. Please login.";
+
+                    }
+
+                    else if (
+                        error.code ===
+                        "auth/invalid-email"
+                    ) {
+
+                        signupMessage.textContent =
+                            "Please enter a valid email.";
+
+                    }
+
+                    else if (
+                        error.code ===
+                        "auth/weak-password"
+                    ) {
+
+                        signupMessage.textContent =
+                            "Password must contain at least 6 characters.";
+
+                    }
+
+                    else {
+
+                        signupMessage.textContent =
+                            "Unable to create account. Please try again.";
+
+                    }
+
+                }
+
+            }
+        );
+
+    </script>
 
 </body>
+
 </html>

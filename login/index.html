@@ -1,157 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Form</title>
 
-  <link rel="stylesheet" href="styless.css">
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Monster Battle Ground - Login</title>
+
+    <link rel="stylesheet" href="styless.css">
+
 </head>
+
 
 <body>
 
-  <div class="wrapper">
+    <div class="container">
 
-    <form id="loginForm">
+        <h1>Login</h1>
 
-      <h1>Login</h1>
 
-      <div class="input-box">
-        <input
-          type="email"
-          id="email"
-          placeholder="Email"
-          required
-        >
-        <i class="bx bxs-envelope"></i>
-      </div>
+        <form id="loginForm">
 
-      <div class="input-box">
-        <input
-          type="password"
-          id="password"
-          placeholder="Password"
-          required
-        >
-        <i class="bx bxs-lock-alt"></i>
-      </div>
+            <input
+                type="email"
+                id="email"
+                placeholder="Email"
+                required
+            >
 
-      <div class="remember-forgot">
-        <label>
-          <input type="checkbox" id="rememberMe">
-          Remember Me
-        </label>
 
-        <a href="#">Forgot Password</a>
-      </div>
+            <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                required
+            >
 
-      <button type="submit" class="btn">
-        Login
-      </button>
 
-      <p id="loginMessage"></p>
+            <div class="options">
 
-      <div class="register-link">
+                <label>
+
+                    <input
+                        type="checkbox"
+                        id="rememberMe"
+                        checked
+                    >
+
+                    Remember Me
+
+                </label>
+
+
+                <span>
+                    Forgot Password?
+                </span>
+
+            </div>
+
+
+            <button type="submit">
+                Login
+            </button>
+
+
+            <p id="loginMessage"></p>
+
+        </form>
+
+
         <p>
-          Don't have an account?
-          <a href="../signup/index.html">Signup</a>
+
+            Don't have an account?
+
+            <a href="../signup/index.html">
+                Sign Up
+            </a>
+
         </p>
-      </div>
 
-    </form>
-
-  </div>
+    </div>
 
 
-  <!-- Firebase Login -->
 
-  <script type="module">
+    <script type="module">
 
-    import { initializeApp }
-      from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-
-    import {
-      getAuth,
-      signInWithEmailAndPassword
-    }
-      from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+        import {
+            initializeApp
+        } from
+        "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCU2wRnU-8O8SPk9AgUBBnjKMfE82GQ6Ds",
-      authDomain: "monster-battle-ground.firebaseapp.com",
-      projectId: "monster-battle-ground",
-      storageBucket: "monster-battle-ground.firebasestorage.app",
-      messagingSenderId: "569924636272",
-      appId: "1:569924636272:web:7d99af119f2fd39dc12eb5"
-    };
+        import {
+            getAuth,
+            signInWithEmailAndPassword,
+            setPersistence,
+            browserLocalPersistence
+        } from
+        "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+        /* =========================================
+           FIREBASE CONFIG
+        ========================================= */
+
+        const firebaseConfig = {
+
+            apiKey:
+                "AIzaSyCU2wRnU-8O8Spk9AgUBBnjKMfE82GQ6Ds",
+
+            authDomain:
+                "monster-battle-ground.firebaseapp.com",
+
+            projectId:
+                "monster-battle-ground",
+
+            storageBucket:
+                "monster-battle-ground.firebasestorage.app",
+
+            messagingSenderId:
+                "569924636272",
+
+            appId:
+                "1:569924636272:web:7d99af119f2fd39dc12eb5"
+
+        };
 
 
-    const loginForm = document.getElementById("loginForm");
-    const loginMessage = document.getElementById("loginMessage");
+        const app =
+            initializeApp(firebaseConfig);
 
 
-    loginForm.addEventListener("submit", async (event) => {
-
-      event.preventDefault();
-
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-
-      loginMessage.textContent = "Logging in...";
+        const auth =
+            getAuth(app);
 
 
-      try {
 
-        await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
+        /* =========================================
+           ELEMENTS
+        ========================================= */
+
+        const loginForm =
+            document.getElementById(
+                "loginForm"
+            );
+
+
+        const emailInput =
+            document.getElementById(
+                "email"
+            );
+
+
+        const passwordInput =
+            document.getElementById(
+                "password"
+            );
+
+
+        const rememberMe =
+            document.getElementById(
+                "rememberMe"
+            );
+
+
+        const loginMessage =
+            document.getElementById(
+                "loginMessage"
+            );
+
+
+
+        /* =========================================
+           LOGIN
+        ========================================= */
+
+        loginForm.addEventListener(
+            "submit",
+            async (event) => {
+
+                event.preventDefault();
+
+
+                const email =
+                    emailInput.value.trim();
+
+
+                const password =
+                    passwordInput.value;
+
+
+                loginMessage.textContent =
+                    "Logging in...";
+
+
+                try {
+
+                    /*
+                     * IMPORTANT:
+                     * Keep the Firebase login active
+                     * even when the user changes pages.
+                     */
+
+                    await setPersistence(
+                        auth,
+                        browserLocalPersistence
+                    );
+
+
+                    /*
+                     * REAL FIREBASE LOGIN
+                     */
+
+                    await signInWithEmailAndPassword(
+                        auth,
+                        email,
+                        password
+                    );
+
+
+                    loginMessage.textContent =
+                        "Login successful!";
+
+
+                    /*
+                     * Go to Welcome page.
+                     */
+
+                    window.location.replace(
+                        "../welcome/index.html?returning=true"
+                    );
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "Login error:",
+                        error
+                    );
+
+
+                    if (
+                        error.code ===
+                        "auth/invalid-credential"
+                    ) {
+
+                        loginMessage.textContent =
+                            "Incorrect email or password.";
+
+                    }
+
+                    else if (
+                        error.code ===
+                        "auth/user-not-found"
+                    ) {
+
+                        loginMessage.textContent =
+                            "No account found with this email.";
+
+                    }
+
+                    else if (
+                        error.code ===
+                        "auth/wrong-password"
+                    ) {
+
+                        loginMessage.textContent =
+                            "Incorrect password.";
+
+                    }
+
+                    else if (
+                        error.code ===
+                        "auth/invalid-email"
+                    ) {
+
+                        loginMessage.textContent =
+                            "Please enter a valid email.";
+
+                    }
+
+                    else {
+
+                        loginMessage.textContent =
+                            "Login failed. Please try again.";
+
+                    }
+
+                }
+
+            }
         );
 
-        loginMessage.textContent = "Login successful!";
-
-        setTimeout(() => {
-          window.location.href = "../welcome/index.html?returning=true";
-        }, 700);
-
-      }
-
-      catch (error) {
-
-        console.error(error);
-
-        if (error.code === "auth/invalid-credential") {
-
-          loginMessage.textContent =
-            "Incorrect email or password.";
-
-        }
-
-        else if (error.code === "auth/user-not-found") {
-
-          loginMessage.textContent =
-            "No account found with this email.";
-
-        }
-
-        else {
-
-          loginMessage.textContent =
-            "Login failed. Please try again.";
-
-        }
-
-      }
-
-    });
-
-  </script>
+    </script>
 
 </body>
+
 </html>
