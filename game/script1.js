@@ -7,7 +7,9 @@ import {
     getFirestore,
     collection,
     addDoc,
-    serverTimestamp
+    serverTimestamp,
+    doc,
+    getDoc
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -28,11 +30,138 @@ let currentUser = null;
 let gameResultSaved = false;
 
 onAuthStateChanged(auth, (user) => {
+
     currentUser = user;
+
 });
 
 window.addEventListener('load', function () {
-    const canvas = document.getElementById('canvas1');
+
+/* =====================================
+   GAME AUDIO
+===================================== */
+
+const oceanAmbience =
+    document.getElementById("oceanAmbience");
+
+const spaceMusic =
+    document.getElementById("spaceMusic");
+
+let gameMusicVolume = 0.7;
+
+function setGameMusicVolume(value) {
+
+    const volume =
+        Math.max(0, Math.min(1, Number(value)));
+
+    gameMusicVolume = volume;
+
+    if (spaceMusic) {
+        spaceMusic.volume = volume;
+    }
+
+    if (oceanAmbience) {
+        oceanAmbience.volume = volume * 0.25;
+    }
+}
+
+
+async function loadGameMusicVolume() {
+
+    if (!currentUser) {
+        return;
+    }
+
+    try {
+
+        const userRef =
+            doc(
+                db,
+                "users",
+                currentUser.uid
+            );
+
+        const snapshot =
+            await getDoc(userRef);
+
+        if (snapshot.exists()) {
+
+            const data =
+                snapshot.data();
+
+            const savedVolume =
+                data.musicVolume ?? 100;
+
+            setGameMusicVolume(
+                Number(savedVolume) / 100
+            );
+
+            console.log(
+                "🎵 Game music volume:",
+                savedVolume + "%"
+            );
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Music volume load error:",
+            error
+        );
+
+    }
+}
+
+
+onAuthStateChanged(auth, async (user) => {
+
+    currentUser = user;
+
+    if (user) {
+        await loadGameMusicVolume();
+    }
+
+});
+
+
+function startGameMusic() {
+
+    if (!spaceMusic || !oceanAmbience) {
+        return;
+    }
+
+    setGameMusicVolume(gameMusicVolume);
+
+    const musicPromise =
+        spaceMusic.play();
+
+    oceanAmbience.play();
+
+    if (musicPromise !== undefined) {
+        musicPromise.catch(() => {
+            console.log(
+                "Music will start after user interaction."
+            );
+        });
+    }
+}
+
+
+/* Start audio after the player interacts with the game. */
+document.addEventListener(
+    "pointerdown",
+    startGameMusic,
+    { once: true }
+);
+
+document.addEventListener(
+    "keydown",
+    startGameMusic,
+    { once: true }
+);
+
+
+const canvas = document.getElementById('canvas1');
     const ctx = canvas.getContext('2d');
     canvas.width = 1000;
     canvas.height = 500;
