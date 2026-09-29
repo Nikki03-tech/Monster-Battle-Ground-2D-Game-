@@ -19,6 +19,43 @@
 
 <body>
 
+    <audio
+        id="globalMusic"
+        src="../audio/music/space-bgm.mp3"
+        loop
+        preload="auto">
+    </audio>
+
+    <script>
+        const globalMusic = document.getElementById("globalMusic");
+
+        function startGlobalMusic() {
+            if (!globalMusic) return;
+
+            globalMusic.volume = 0.7;
+
+            const promise = globalMusic.play();
+
+            if (promise !== undefined) {
+                promise.catch(() => {
+                    console.log("Music will start after user interaction.");
+                });
+            }
+        }
+
+        document.addEventListener(
+            "pointerdown",
+            startGlobalMusic,
+            { once: true }
+        );
+
+        document.addEventListener(
+            "keydown",
+            startGlobalMusic,
+            { once: true }
+        );
+    </script>
+
     <!-- HOME / HERO SECTION -->
     <section class="hero" id="home">
 
@@ -64,7 +101,7 @@
 
                     <p>Where Fight Never Ends</p>
 
-                    <a class="start-button" href="../signup/index.html">
+                    <a class="start-button" href="../signup/index.html" id="playNowButton">
                         Play Now
                     </a>
 
@@ -77,6 +114,39 @@
     </section>
 
 
+
+    <!-- HOME PAGE MUSIC -->
+    <audio
+        id="homeMusic"
+        src="../audio/music/space-bgm.mp3"
+        loop
+        preload="auto">
+    </audio>
+
+    <script>
+        const playNowButton =
+            document.getElementById("playNowButton");
+
+        const homeMusic =
+            document.getElementById("homeMusic");
+
+        playNowButton.addEventListener("click", () => {
+
+            homeMusic.volume = 0.7;
+
+            homeMusic.play()
+                .then(() => {
+                    console.log("🎵 Music started from Play Now");
+                })
+                .catch((error) => {
+                    console.log(
+                        "Music could not start:",
+                        error
+                    );
+                });
+
+        });
+    </script>
 
 </body>
 </html>

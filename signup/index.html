@@ -19,6 +19,43 @@
 
 <body>
 
+    <audio
+        id="globalMusic"
+        src="../audio/music/space-bgm.mp3"
+        loop
+        preload="auto">
+    </audio>
+
+    <script>
+        const globalMusic = document.getElementById("globalMusic");
+
+        function startGlobalMusic() {
+            if (!globalMusic) return;
+
+            globalMusic.volume = 0.7;
+
+            const promise = globalMusic.play();
+
+            if (promise !== undefined) {
+                promise.catch(() => {
+                    console.log("Music will start after user interaction.");
+                });
+            }
+        }
+
+        document.addEventListener(
+            "pointerdown",
+            startGlobalMusic,
+            { once: true }
+        );
+
+        document.addEventListener(
+            "keydown",
+            startGlobalMusic,
+            { once: true }
+        );
+    </script>
+
     <div class="container">
 
         <h1>Create Account</h1>
