@@ -1,12 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reviews - Monster Battle Ground</title>
+
     <link rel="stylesheet" href="reviews.css">
     <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
+<script>
+    const globalMusic = new Audio("../audio/music/space-bgm.mp3");
+    globalMusic.loop = true;
+    globalMusic.volume = 0.7;
+
+    function startGlobalMusic() {
+        globalMusic.play().catch(() => {
+            console.log("Music will start after user interaction.");
+        });
+    }
+
+    document.addEventListener("pointerdown", startGlobalMusic, { once: true });
+    document.addEventListener("keydown", startGlobalMusic, { once: true });
+</script>
+
 
     <div class="reviews-page">
 
@@ -15,44 +33,345 @@
         <h1>Player Reviews</h1>
 
         <p class="subtitle">
-            What players say about Monster Battle Ground
+            Share your experience with Monster Battle Ground
         </p>
 
-        <div class="reviews-container">
+        <!-- REVIEW FORM -->
+        <div class="review-form-card" id="reviewFormCard">
 
-            <div class="review-card">
-                <div class="stars">★★★★★</div>
-                <p>
-                    "An exciting monster battle game with fun gameplay
-                    and great challenges."
-                </p>
-                <h3>Alex</h3>
-                <span>Player</span>
-            </div>
+            <h2>Leave a Review ⭐</h2>
 
-            <div class="review-card">
-                <div class="stars">★★★★★</div>
-                <p>
-                    "The battles are really fun and the game is simple
-                    to understand."
-                </p>
-                <h3>Sarah</h3>
-                <span>Player</span>
-            </div>
+            <p id="loginMessage">
+                Please log in to share your review.
+            </p>
 
-            <div class="review-card">
-                <div class="stars">★★★★☆</div>
-                <p>
-                    "Loved the monster theme and the fast-paced
-                    gameplay. Really enjoyable!"
-                </p>
-                <h3>Ryan</h3>
-                <span>Player</span>
-            </div>
+            <form id="reviewForm">
+
+                <label for="rating">Your Rating</label>
+
+                <select id="rating" required>
+                    <option value="5">★★★★★ — 5 Stars</option>
+                    <option value="4">★★★★☆ — 4 Stars</option>
+                    <option value="3">★★★☆☆ — 3 Stars</option>
+                    <option value="2">★★☆☆☆ — 2 Stars</option>
+                    <option value="1">★☆☆☆☆ — 1 Star</option>
+                </select>
+
+                <label for="reviewText">Your Review</label>
+
+                <textarea
+                    id="reviewText"
+                    rows="4"
+                    maxlength="500"
+                    placeholder="Tell us what you think about the game..."
+                    required
+                ></textarea>
+
+                <button type="submit" id="submitReview">
+                    Submit Review
+                </button>
+
+                <p id="reviewMessage"></p>
+
+            </form>
+
+        </div>
+
+        <!-- REVIEWS -->
+        <div class="reviews-container" id="reviewsContainer">
+
+            <p class="loading-message" id="loadingMessage">
+                Loading player reviews...
+            </p>
 
         </div>
 
     </div>
+
+    <script type="module">
+
+        import {
+            initializeApp
+        } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+
+        import {
+            getAuth,
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+        import {
+            getFirestore,
+            collection,
+            addDoc,
+            query,
+            orderBy,
+            onSnapshot,
+            serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+
+        // Firebase configuration
+        const firebaseConfig = {
+    apiKey: "AIzaSyCU2wRnU-8O8SPk9AgUBBnjKMfE82GQ6Ds",
+    authDomain: "monster-battle-ground.firebaseapp.com",
+    projectId: "monster-battle-ground",
+    storageBucket: "monster-battle-ground.firebasestorage.app",
+    messagingSenderId: "569924636272",
+    appId: "1:569924636272:web:7d99af119f2fd39dc12eb5",
+    measurementId: "G-Y9HEEBHBXT"
+};
+
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+
+        const reviewForm = document.getElementById("reviewForm");
+        const rating = document.getElementById("rating");
+        const reviewText = document.getElementById("reviewText");
+        const submitReview = document.getElementById("submitReview");
+        const reviewMessage = document.getElementById("reviewMessage");
+        const loginMessage = document.getElementById("loginMessage");
+        const reviewsContainer = document.getElementById("reviewsContainer");
+        const loadingMessage = document.getElementById("loadingMessage");
+
+
+        let currentUser = null;
+
+
+        // Escape user-generated text before displaying it
+        function escapeHTML(text) {
+            return String(text)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+
+        // Display stars
+        function createStars(value) {
+
+            const number = Number(value);
+
+            return "★★★★★"
+                .split("")
+                .map((star, index) =>
+                    index < number ? "★" : "☆"
+                )
+                .join("");
+
+        }
+
+
+        // Load public reviews
+        function loadReviews() {
+
+            const reviewsRef = collection(db, "reviews");
+
+            const reviewsQuery = query(
+                reviewsRef,
+                orderBy("createdAt", "desc")
+            );
+
+
+            onSnapshot(
+                reviewsQuery,
+                (snapshot) => {
+
+                    reviewsContainer.innerHTML = "";
+
+
+                    if (snapshot.empty) {
+
+                        reviewsContainer.innerHTML = `
+                            <p class="loading-message">
+                                No reviews yet. Be the first player to leave one! ⭐
+                            </p>
+                        `;
+
+                        return;
+                    }
+
+
+                    snapshot.forEach((docSnapshot) => {
+
+                        const review = docSnapshot.data();
+
+                        const username =
+                            escapeHTML(review.username || "Player");
+
+                        const text =
+                            escapeHTML(review.text || "");
+
+                        const stars =
+                            createStars(review.rating || 5);
+
+
+                        const card =
+                            document.createElement("div");
+
+                        card.className = "review-card";
+
+
+                        card.innerHTML = `
+                            <div class="stars">${stars}</div>
+
+                            <p>"${text}"</p>
+
+                            <h3>${username}</h3>
+
+                            <span>Player</span>
+                        `;
+
+
+                        reviewsContainer.appendChild(card);
+
+                    });
+
+                },
+
+                (error) => {
+
+                    console.error(
+                        "Review loading error:",
+                        error
+                    );
+
+                    reviewsContainer.innerHTML = `
+                        <p class="loading-message">
+                            Unable to load reviews right now.
+                        </p>
+                    `;
+
+                }
+            );
+
+        }
+
+
+        // Check login state
+        onAuthStateChanged(auth, (user) => {
+
+            currentUser = user;
+
+
+            if (user) {
+
+                loginMessage.textContent =
+                    `Logged in as ${user.displayName || user.email}`;
+
+                submitReview.disabled = false;
+
+                reviewText.disabled = false;
+                rating.disabled = false;
+
+            } else {
+
+                loginMessage.textContent =
+                    "Please log in to share your review.";
+
+                submitReview.disabled = true;
+
+                reviewText.disabled = true;
+                rating.disabled = true;
+
+            }
+
+        });
+
+
+        // Submit review
+        reviewForm.addEventListener("submit", async (event) => {
+
+            event.preventDefault();
+
+
+            if (!currentUser) {
+
+                reviewMessage.textContent =
+                    "Please log in before submitting a review.";
+
+                return;
+
+            }
+
+
+            const text = reviewText.value.trim();
+            const selectedRating = Number(rating.value);
+
+
+            if (!text) {
+
+                reviewMessage.textContent =
+                    "Please write a review.";
+
+                return;
+
+            }
+
+
+            submitReview.disabled = true;
+
+            reviewMessage.textContent =
+                "Submitting review...";
+
+
+            try {
+
+                await addDoc(
+                    collection(db, "reviews"),
+                    {
+                        userId: currentUser.uid,
+
+                        username:
+                            currentUser.displayName ||
+                            "Player",
+
+                        email:
+                            currentUser.email || "",
+
+                        rating: selectedRating,
+
+                        text: text,
+
+                        createdAt: serverTimestamp()
+                    }
+                );
+
+
+                reviewText.value = "";
+                rating.value = "5";
+
+
+                reviewMessage.textContent =
+                    "⭐ Your review was submitted!";
+
+
+            } catch (error) {
+
+                console.error(
+                    "Review submission error:",
+                    error
+                );
+
+                reviewMessage.textContent =
+                    "Unable to submit your review. Please try again.";
+
+            } finally {
+
+                submitReview.disabled = false;
+
+            }
+
+        });
+
+
+        loadReviews();
+
+    </script>
 
 </body>
 </html>

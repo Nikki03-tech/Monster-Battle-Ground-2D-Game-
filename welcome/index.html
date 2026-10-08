@@ -40,26 +40,26 @@
 
 
         .background {
-
-            background-image:
-                url("wee.png");
-
-            background-size:
-                100% 100%;
-
-            background-position:
-                center;
-
+            position: relative;
             width: 100%;
             height: 100%;
-
             display: flex;
-
             justify-content: center;
-
             align-items: center;
-
             flex-direction: column;
+            isolation: isolate;
+        }
+
+        .background::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url("wee.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.90;
+            z-index: -1;
         }
 
 
@@ -742,7 +742,7 @@
                 return;
             }
 
-            welcomeMusic.volume = 0.7;
+            welcomeMusic.volume = Math.max(0, Math.min(1, Number(musicVolume?.value ?? 100) / 100));
 
             const musicPromise =
                 welcomeMusic.play();
