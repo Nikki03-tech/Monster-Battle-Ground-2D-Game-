@@ -2049,10 +2049,20 @@
         musicVolume.addEventListener(
             "input",
             () => {
+                const value = Number(musicVolume.value);
 
-                musicValue.textContent =
-                    musicVolume.value + "%";
+                musicValue.textContent = value + "%";
 
+                // Update the master track immediately.
+                window.parent.postMessage(
+                    { type: "mbg-music-volume", value },
+                    "*"
+                );
+
+                window.parent.postMessage(
+                    { type: "mbg-game-music-volume", value },
+                    "*"
+                );
             }
         );
 
@@ -2114,8 +2124,14 @@
             "input",
             () => {
 
-                soundValue.textContent =
-                    soundVolume.value + "%";
+                const value = Number(soundVolume.value);
+
+                soundValue.textContent = value + "%";
+
+                window.parent.postMessage(
+                    { type: "mbg-sound-volume", value },
+                    "*"
+                );
 
             }
         );

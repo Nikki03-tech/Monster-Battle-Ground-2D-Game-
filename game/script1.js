@@ -70,6 +70,21 @@ function setGameSoundVolume(value) {
     gameSoundVolume = Math.max(0, Math.min(1, Number(value)));
 }
 
+window.addEventListener("message", event => {
+    if (event.source !== window.parent) return;
+
+    const data = event.data;
+    if (!data || !Number.isFinite(Number(data.value))) return;
+
+    const value = Math.max(0, Math.min(100, Number(data.value))) / 100;
+
+    if (data.type === "mbg-game-music-volume") {
+        setGameMusicVolume(value);
+    } else if (data.type === "mbg-sound-volume") {
+        setGameSoundVolume(value);
+    }
+});
+
 function playGameSound(name) {
     const source = soundEffects[name];
     if (!source || gameSoundVolume <= 0) return;

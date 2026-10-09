@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Monster Battle Ground | Home</title>
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #080d1b;
+    }
+
+    #gamePage {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+  <iframe id="gamePage" src="../home/index.html" title="Monster Battle Ground"></iframe>
+
+  <audio id="persistentMusic"
+         src="../audio/music/space-bgm.mp3"
+         loop
+         preload="auto"></audio>
+
+  <script>
+    const frame = document.getElementById("gamePage");
+    const music = document.getElementById("persistentMusic");
+
+    let musicVolumePercent = 70;
+    music.volume = musicVolumePercent / 100;
+
+    // Accept volume updates from the embedded Welcome page.
+    window.addEventListener("message", (event) => {
+      if (event.source !== frame.contentWindow) return;
+      const data = event.data;
+      const value = Number(data?.value);
+      if (!Number.isFinite(value)) return;
+
+      const volume = Math.max(0, Math.min(100, value)) / 100;
+
+      if (data.type === "mbg-music-volume") {
+        music.volume = volume;
+      } else if (data.type === "mbg-sound-volume") {
+        frame.contentWindow.postMessage(
+          { type: "mbg-sound-volume", value },
+          "*"
+        );
+      } else if (data.type === "mbg-game-music-volume") {
+        frame.contentWindow.postMessage(
+          { type: "mbg-game-music-volume", value },
+          "*"
+        );
+      }
+    });
+
+    async function startMusic() {
+      if (!music.paused) return;
+
+      try {
+        await music.play();
+      } catch (error) {
+        // Browser autoplay restrictions mean a user interaction is required.
+      }
+    }
+
+    // Start on the first interaction with the outer page.
+    document.addEventListener("pointerdown", startMusic, { once: true });
+    document.addEventListener("keydown", startMusic, { once: true });
+
+    frame.addEventListener("load", () => {
+      try {
+        const childDocument = frame.contentDocument;
+        const childWindow = frame.contentWindow;
+        if (!childDocument || !childWindow) return;
+
+        // Mute duplicate copies of the background track, not game effects.
+        ["homeMusic", "welcomeMusic", "spaceMusic"].forEach(id => {
+          const audio = childDocument.getElementById(id);
+          if (audio) {
+            audio.pause();
+            audio.muted = true;
+          }
+        });
+
+        // Prevent JavaScript-created copies of the same background track.
+        const mediaPrototype = childWindow.HTMLMediaElement.prototype;
+
+        if (!mediaPrototype.__mbgMusicGuardInstalled) {
+          const originalPlay = mediaPrototype.play;
+
+          mediaPrototype.play = function (...args) {
+            const source = this.currentSrc || this.src || "";
+
+            if (source.includes("space-bgm.mp3")) {
+              this.pause();
+              return Promise.resolve();
+            }
+
+            return originalPlay.apply(this, args);
+          };
+
+          mediaPrototype.__mbgMusicGuardInstalled = true;
+        }
+
+        // The first interaction inside the embedded site starts the master track.
+        childDocument.addEventListener("pointerdown", startMusic, { once: true });
+        childDocument.addEventListener("keydown", startMusic, { once: true });
+      } catch (error) {
+        console.warn("Could not access the embedded page:", error);
+      }
+    });
+  </script>
+</body>
+</html>
