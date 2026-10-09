@@ -41,111 +41,90 @@ window.addEventListener('load', function () {
    GAME AUDIO
 ===================================== */
 
-const oceanAmbience =
-    document.getElementById("oceanAmbience");
-
-const spaceMusic =
-    document.getElementById("spaceMusic");
+const oceanAmbience = document.getElementById("oceanAmbience");
+const spaceMusic = document.getElementById("spaceMusic");
 
 let gameMusicVolume = 0.7;
+let gameSoundVolume = 1;
+
+const soundEffects = {
+    shoot: new Audio("../audio/sfx/shoot.mp3"),
+    damage: new Audio("../audio/sfx/damage.mp3"),
+    explosion: new Audio("../audio/sfx/explosion.mp3"),
+    powerup: new Audio("../audio/sfx/powerup.mp3"),
+    win: new Audio("../audio/sfx/win.mp3"),
+    lose: new Audio("../audio/sfx/lose.mp3")
+};
+
+for (const audio of Object.values(soundEffects)) {
+    audio.preload = "auto";
+}
 
 function setGameMusicVolume(value) {
-
-    const volume =
-        Math.max(0, Math.min(1, Number(value)));
-
-    gameMusicVolume = volume;
-
-    if (spaceMusic) {
-        spaceMusic.volume = volume;
-    }
-
-    if (oceanAmbience) {
-        oceanAmbience.volume = volume * 0.25;
-    }
+    gameMusicVolume = Math.max(0, Math.min(1, Number(value)));
+    if (spaceMusic) spaceMusic.volume = gameMusicVolume;
+    if (oceanAmbience) oceanAmbience.volume = gameMusicVolume * 0.25;
 }
 
+function setGameSoundVolume(value) {
+    gameSoundVolume = Math.max(0, Math.min(1, Number(value)));
+}
 
-async function loadGameMusicVolume() {
+function playGameSound(name) {
+    const source = soundEffects[name];
+    if (!source || gameSoundVolume <= 0) return;
 
-    if (!currentUser) {
-        return;
-    }
+    const audio = source.cloneNode();
+    audio.volume = gameSoundVolume;
+    audio.play().catch(() => {});
+}
+
+function stopGameMusic() {
+    [spaceMusic, oceanAmbience].forEach(audio => {
+        if (audio) {
+            audio.pause();
+            audio.currentTime = 0;
+        }
+    });
+}
+
+async function loadGameAudioSettings() {
+    if (!currentUser) return;
 
     try {
+        const snapshot = await getDoc(doc(db, "users", currentUser.uid));
+        if (!snapshot.exists()) return;
 
-        const userRef =
-            doc(
-                db,
-                "users",
-                currentUser.uid
-            );
-
-        const snapshot =
-            await getDoc(userRef);
-
-        if (snapshot.exists()) {
-
-            const data =
-                snapshot.data();
-
-            const savedVolume =
-                data.musicVolume ?? 100;
-
-            setGameMusicVolume(
-                Number(savedVolume) / 100
-            );
-
-            console.log(
-                "🎵 Game music volume:",
-                savedVolume + "%"
-            );
-        }
-
+        const data = snapshot.data();
+        setGameMusicVolume(Number(data.musicVolume ?? 70) / 100);
+        setGameSoundVolume(Number(data.soundVolume ?? 100) / 100);
     } catch (error) {
-
-        console.error(
-            "Music volume load error:",
-            error
-        );
-
+        console.error("Game audio settings load error:", error);
     }
 }
 
-
-onAuthStateChanged(auth, async (user) => {
-
-    currentUser = user;
-
-    if (user) {
-        await loadGameMusicVolume();
-    }
-
+let resolveInitialAudioSettings;
+const initialAudioSettingsReady = new Promise(resolve => {
+    resolveInitialAudioSettings = resolve;
 });
 
-
-function startGameMusic() {
-
-    if (!spaceMusic || !oceanAmbience) {
-        return;
+onAuthStateChanged(auth, async user => {
+    currentUser = user;
+    try {
+        if (user) await loadGameAudioSettings();
+    } finally {
+        resolveInitialAudioSettings();
     }
+});
 
+async function startGameMusic() {
+    if (!spaceMusic || !oceanAmbience) return;
+
+    await initialAudioSettingsReady;
     setGameMusicVolume(gameMusicVolume);
-
-    const musicPromise =
-        spaceMusic.play();
-
-    oceanAmbience.play();
-
-    if (musicPromise !== undefined) {
-        musicPromise.catch(() => {
-            console.log(
-                "Music will start after user interaction."
-            );
-        });
-    }
+    spaceMusic.play().catch(() => {});
+    oceanAmbience.play().catch(() => {});
 }
-
 
 /* Start audio after the player interacts with the game. */
 document.addEventListener(
@@ -205,6 +184,7 @@ const canvas = document.getElementById('canvas1');
 
                     if (!this.game.gameOver) {
                         this.game.player.shootTop();
+                        playGameSound('shoot');
                     }
                 }
 
@@ -261,11 +241,8 @@ const canvas = document.getElementById('canvas1');
 
                 if (this.game.gameOver) return;
 
-                this.game.player.y += 30;
-
-                if (this.game.player.y < 0) {
-                    this.game.player.y = 0;
-                }
+                const maxY = this.game.height - this.game.player.height;
+                this.game.player.y = Math.min(this.game.player.y + 30, maxY);
             });
 
 
@@ -280,6 +257,7 @@ const canvas = document.getElementById('canvas1');
                 if (this.game.gameOver) return;
 
                 this.game.player.shootTop();
+                playGameSound('shoot');
                 if (this.game.player.y < 0) {
                     this.game.player.y = 0;
                 }
@@ -831,6 +809,8 @@ async function saveGameResult(game, won) {
 
 function showGameOverScreen(game, won) {
 
+    playGameSound(won ? 'win' : 'lose');
+
     const overlay =
         document.getElementById('gameOverScreen');
 
@@ -896,9 +876,9 @@ function showGameOverScreen(game, won) {
             this.ammoInterval = 350;
             this.gameOver = false;
             this.score = 0;
-            this.winningScore = 65;
+            this.winningScore = 165;
             this.gameTime = 0;
-            this.timeLimit = 30000;
+            this.timeLimit = 45000;
             this.speed = 1;
             this.debug = false;
         }
@@ -1030,6 +1010,7 @@ function showGameOverScreen(game, won) {
                     if (enemy.type === 'lucky') {
 
                         this.player.enterPowerUp();
+                        playGameSound('powerup');
 
                     } else if (!this.gameOver) {
 
@@ -1049,6 +1030,7 @@ function showGameOverScreen(game, won) {
                     if (this.checkCollision(projectile, enemy)) {
 
                         enemy.lives--;
+                        playGameSound('damage');
 
                         projectile.markedForDeletion = true;
 
@@ -1067,6 +1049,7 @@ function showGameOverScreen(game, won) {
                         // ----------------------------------
 
                         if (enemy.lives <= 0) {
+                            playGameSound('explosion');
 
 
                             for (let i = 0; i < enemy.score; i++) {
@@ -1087,10 +1070,10 @@ function showGameOverScreen(game, won) {
                             this.addExplosion(enemy);
 
 
-                            // Hive enemy creates drones
+                            // Hive enemy creates a smaller drone swarm
                             if (enemy.type === 'hive') {
 
-                                for (let i = 0; i < 5; i++) {
+                                for (let i = 0; i < 2; i++) {
 
                                     this.enemies.push(
                                         new Drone(

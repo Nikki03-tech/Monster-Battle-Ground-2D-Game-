@@ -4,8 +4,35 @@
     <meta charset="UTF-8">
     <title>CSS Only Accordion Design</title>
     <link rel="stylesheet" href="style3.css">
+<style>
+.home-button,
+.back-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    display: inline-block;
+    padding: 10px 18px;
+    color: #fff !important;
+    font-weight: 800 !important;
+    text-decoration: none !important;
+    background: rgba(10, 20, 48, 0.92);
+    border: 1px solid rgba(83, 218, 255, 0.7);
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.home-button:hover,
+.back-button:hover {
+    color: #fff !important;
+    background: #087da8;
+    transform: translateY(-2px);
+}
+</style>
 </head>
 <body>
+<a class="home-button" href="index.html">← Home</a>
 <script>
     const globalMusic = new Audio("../audio/music/space-bgm.mp3");
     globalMusic.loop = true;
@@ -68,5 +95,20 @@
             </div>
         </div>
     </div>
+
+<style id="force-white-home-buttons">
+a.home-button,
+a.back-button,
+a.home,
+a.back,
+a.home-link,
+a.back-link {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-weight: 800 !important;
+    text-decoration: none !important;
+}
+</style>
+
 </body>
 </html>

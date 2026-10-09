@@ -372,3 +372,146 @@ nav ul li a {
         grid-template-columns: 1fr;
     }
 }
+
+/* Clean, responsive homepage polish */
+.hero {
+    min-height: 100vh;
+    height: auto;
+    background-image: url("ip.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.hero header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding: 24px 0;
+}
+
+.hero header .logo h2 a {
+    font-family: "Poppins", sans-serif;
+    font-size: 27px;
+    font-weight: 700;
+    color: #fff;
+}
+
+nav ul {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+}
+
+nav ul li a {
+    margin-left: 0;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    transition: color .2s ease, border-color .2s ease;
+}
+
+nav ul li:not(:last-child) a:hover,
+nav ul li:not(:last-child) a:focus-visible {
+    color: #eaf75d;
+    border-bottom-color: #eaf75d;
+}
+
+.content {
+    padding-top: clamp(35px, 8vh, 80px);
+    padding-bottom: 40px;
+}
+
+.content .main-text {
+    margin-bottom: 0;
+    color: #fff;
+}
+
+.content .main-text h6 {
+    font-family: "Poppins", sans-serif;
+    font-size: clamp(17px, 2vw, 22px);
+    font-weight: 500;
+    margin-bottom: 16px;
+}
+
+.content .main-text h1 {
+    font-size: clamp(54px, 8vw, 76px);
+    line-height: 1.05;
+    margin-bottom: 20px;
+    text-shadow: 0 3px 18px rgba(0, 0, 0, .3);
+}
+
+.content .main-text h3 {
+    font-family: "Poppins", sans-serif;
+    font-size: clamp(25px, 4vw, 36px);
+    line-height: 1.2;
+    margin-bottom: 14px;
+}
+
+.content .main-text p {
+    width: min(100%, 440px);
+    font-family: "Poppins", sans-serif;
+    font-size: clamp(17px, 2vw, 20px);
+    line-height: 1.65;
+    margin-bottom: 28px;
+}
+
+.content .main-text a {
+    display: inline-block;
+    padding: 12px 28px;
+    border: 2px solid #ff3434;
+    border-radius: 6px;
+    background: #ff3434;
+    color: #fff;
+    font-family: "Poppins", sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background .2s ease, transform .2s ease;
+}
+
+.content .main-text a:hover,
+.content .main-text a:focus-visible {
+    background: #d91f2b;
+    border-color: #d91f2b;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 700px) {
+    html,
+    body {
+        height: auto;
+        min-height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .hero {
+        min-height: 100vh;
+        height: auto;
+        background-position: center;
+    }
+
+    .hero header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    nav ul {
+        gap: 16px 22px;
+    }
+
+    nav ul li a {
+        font-size: 13px;
+    }
+
+    .content {
+        padding-top: 35px;
+        padding-bottom: 50px;
+    }
+}

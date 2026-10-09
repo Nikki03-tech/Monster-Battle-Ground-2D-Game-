@@ -6,15 +6,14 @@
 
 #canvas1 {
     border: 5px solid black;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: fixed;
+    inset: 0;
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
     background: #3691b0;
-    max-width: 100%;
-    max-height: 100%;
-    width: 1500px;
-    height: 1000px;
     font-family: 'Bangers', cursive;
 }
 
@@ -35,26 +34,58 @@
     display: none;
 }
 
+/* Fixed, visible game controls */
 .controls {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 10px;
+    position: fixed;
+    inset: auto 0 0 0;
+    width: 100%;
+    height: 190px;
+    display: block;
+    z-index: 9999;
+    pointer-events: none;
 }
 
 .controls button {
-    padding: 10px 20px;
-    font-size: 16px;
-    font-family: 'Bangers', cursive;
-    background: #ff6f61;
-    border: 2px solid white;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    padding: 0;
+    border: 3px solid #fff0d9;
+    border-radius: 18px;
+    background: linear-gradient(145deg, #ffad42, #f07816);
     color: white;
+    font: bold 30px Arial, sans-serif;
+    box-shadow: 0 4px 0 #b94d0b;
     cursor: pointer;
-    transition: background 0.3s ease;
+    touch-action: manipulation;
+    user-select: none;
+    pointer-events: auto;
+    z-index: 10000;
 }
 
-.controls button:hover {
-    background: #ff3b2f;
+#upButton {
+    left: 24px;
+    bottom: 110px;
+}
+
+#downButton {
+    left: 24px;
+    bottom: 30px;
+}
+
+#shootButton {
+    right: 24px;
+    bottom: 40px;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    font-size: 36px;
+    background: linear-gradient(145deg, #ff8f24, #e65c0b);
+}
+
+.controls button:active {
+    transform: translateY(3px);
 }

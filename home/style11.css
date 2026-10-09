@@ -11,7 +11,7 @@
 .wrapper{
     min-height: 100vh;
     width: 100%;
-    background-image: linear-gradient(rgba(170, 168, 168, 0.532),rgba(161, 159, 159, 0.504)), url('pp.png');
+    background-image: linear-gradient(rgba(5, 12, 32, .68), rgba(8, 16, 42, .78)), url('reviews-background.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -56,4 +56,26 @@ article h5{
 }
 article p{
     font-size: 18px;
+}
+
+/* Improve readability on the dark About page */
+article h1,
+article h2,
+article h3,
+article p,
+.wrapper h1,
+.wrapper h2,
+.wrapper h3,
+.wrapper p {
+    color: #ffffff !important;
+}
+
+
+/* Final text-color fix for About page */
+body .wrapper .testimonial article h1,
+body .wrapper .testimonial article blockquote,
+body .wrapper .testimonial article h5,
+body .wrapper .testimonial article p {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
 }
