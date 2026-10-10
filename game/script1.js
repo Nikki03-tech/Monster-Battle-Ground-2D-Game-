@@ -1040,15 +1040,21 @@ function showGameOverScreen(game, won) {
                 // PROJECTILE HITS ENEMY
                 // --------------------------------------
 
-                this.player.projectiles.forEach(projectile => {
+                if (!enemy.markedForDeletion) {
+                    for (const projectile of this.player.projectiles) {
 
-                    if (this.checkCollision(projectile, enemy)) {
+                        // Stop processing once this enemy is destroyed
+                        if (enemy.markedForDeletion) break;
+
+                        // Ignore projectiles that already hit something
+                        if (projectile.markedForDeletion) continue;
+
+                        if (!this.checkCollision(projectile, enemy)) continue;
 
                         enemy.lives--;
                         playGameSound('damage');
 
                         projectile.markedForDeletion = true;
-
 
                         this.particles.push(
                             new Particle(
@@ -1058,17 +1064,15 @@ function showGameOverScreen(game, won) {
                             )
                         );
 
-
                         // ----------------------------------
                         // ENEMY DESTROYED
                         // ----------------------------------
 
                         if (enemy.lives <= 0) {
+                            enemy.markedForDeletion = true;
                             playGameSound('explosion');
 
-
                             for (let i = 0; i < enemy.score; i++) {
-
                                 this.particles.push(
                                     new Particle(
                                         this,
@@ -1076,70 +1080,48 @@ function showGameOverScreen(game, won) {
                                         enemy.y + enemy.height * 0.5
                                     )
                                 );
-
                             }
-
-
-                            enemy.markedForDeletion = true;
 
                             this.addExplosion(enemy);
 
-
-                            // Hive enemy creates a smaller drone swarm
+                            // Spawn exactly two drones when the Hive Whale dies
                             if (enemy.type === 'hive') {
+                                console.count('Hive Whale drone-spawn handler');
+                                console.log('Hive lives:', enemy.lives, 'Deleted:', enemy.markedForDeletion);
 
                                 for (let i = 0; i < 2; i++) {
-
                                     this.enemies.push(
                                         new Drone(
                                             this,
-                                            enemy.x +
-                                                Math.random() * enemy.width,
-
-                                            enemy.y +
-                                                Math.random() *
-                                                enemy.height * 0.5
+                                            enemy.x + Math.random() * enemy.width,
+                                            enemy.y + Math.random() * enemy.height * 0.5
                                         )
                                     );
-
                                 }
-
                             }
-
 
                             // Add score
                             if (!this.gameOver) {
-
                                 this.score += enemy.score;
-
                             }
 
-
-                            // ==================================
-                            // WIN CONDITION - 65 POINTS
-                            // ==================================
-
+                            // Win condition
                             if (this.score >= this.winningScore) {
-
                                 this.score = this.winningScore;
-
                                 this.gameOver = true;
-
                                 showGameOverScreen(this, true);
-
-                                // STOP UPDATE IMMEDIATELY
-                                return;
-
                             }
 
+                            // Do not process more projectiles against this enemy
+                            break;
                         }
-
                     }
+                }
 
-                });
+
+
 
             });
-
 
             // ==========================================
             // REMOVE DELETED ENEMIES
@@ -1168,7 +1150,7 @@ function showGameOverScreen(game, won) {
 
                 this.enemyTimer += deltaTime;
 
-                        }
+            }
         }
 
         // ==========================================

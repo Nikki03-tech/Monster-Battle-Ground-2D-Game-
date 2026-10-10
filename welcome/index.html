@@ -949,25 +949,9 @@
 
 
         <div class="buttons">
-
-            <button>
-
-                <a href="../game/game.html">
-                    Start
-                </a>
-
-            </button>
-
-
-            <button id="exitButton">
-
-                <a href="../home/index.html">
-                    Exit
-                </a>
-
-            </button>
-
-        </div>
+    <button type="button" id="startGameButton">Start</button>
+    <button type="button" id="exitButton">Exit</button>
+</div>
 
     </div>
 
@@ -2262,7 +2246,18 @@
             }
         );
 
+
+    // Start game navigation
+    document.getElementById("startGameButton")?.addEventListener("click", () => {
+        window.location.href = "../game/game.html";
+    });
+
+    document.getElementById("exitButton")?.addEventListener("click", () => {
+        window.location.href = "../persistent-player/index.html";
+    });
+
     </script>
+
 
 </body>
 

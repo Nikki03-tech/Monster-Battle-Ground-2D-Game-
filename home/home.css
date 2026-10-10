@@ -46,8 +46,8 @@ nav ul li a{
     border-bottom: 2px solid transparent;
     transition: .4s;
 }
-nav ul li:not(:last-child) a:hover,
-nav ul li:not(:last-child) a:focus{
+nav ul li a:hover,
+nav ul li a:focus{
     border-bottom: 2px solid white;
 }
 .content{
@@ -415,8 +415,8 @@ nav ul li a {
     transition: color .2s ease, border-color .2s ease;
 }
 
-nav ul li:not(:last-child) a:hover,
-nav ul li:not(:last-child) a:focus-visible {
+nav ul li a:hover,
+nav ul li a:focus-visible {
     color: #eaf75d;
     border-bottom-color: #eaf75d;
 }
