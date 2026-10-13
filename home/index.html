@@ -106,39 +106,24 @@
 
 
 
-    <!-- HOME PAGE MUSIC -->
-    <audio
-        id="homeMusic"
-        src="../audio/music/space-bgm.mp3"
-        loop
-        preload="auto">
-    </audio>
-
+    <!-- Request the persistent player's music on the first user interaction. -->
     <script>
-        const playNowButton =
-            document.getElementById("playNowButton");
+        function requestPersistentMusic() {
+            if (window.parent !== window) {
+                window.parent.postMessage(
+                    { type: "mbg-start-music" },
+                    window.location.origin
+                );
+            }
+        }
 
-        const homeMusic =
-            document.getElementById("homeMusic");
-
-        playNowButton.addEventListener("click", () => {
-
-            homeMusic.volume = 0.7;
-
-            homeMusic.play()
-                .then(() => {
-                    console.log("🎵 Music started from Play Now");
-                })
-                .catch((error) => {
-                    console.log(
-                        "Music could not start:",
-                        error
-                    );
-                });
-
-        });
+        document.addEventListener(
+            "pointerdown", requestPersistentMusic, { once: true }
+        );
+        document.addEventListener(
+            "keydown", requestPersistentMusic, { once: true }
+        );
     </script>
-
 
 <style id="force-white-home-buttons">
 a.home-button,

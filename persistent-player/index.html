@@ -94,6 +94,13 @@
     window.addEventListener("message", (event) => {
       if (event.source !== frame.contentWindow) return;
       const data = event.data;
+
+      // Start the one persistent music track when the homepage is first used.
+      if (data?.type === "mbg-start-music") {
+        startMusic();
+        return;
+      }
+
       const value = Number(data?.value);
       if (!Number.isFinite(value)) return;
 
