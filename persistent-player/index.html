@@ -19,9 +19,63 @@
       height: 100%;
       border: 0;
     }
+  
+    #rotatePrompt {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2147483647;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 18px;
+      padding: 28px;
+      text-align: center;
+      color: white;
+      background: linear-gradient(160deg, #061126, #123c70);
+      font-family: Arial, sans-serif;
+    }
+
+    #rotatePrompt .phone {
+      font-size: 64px;
+      animation: phoneTilt 1.2s ease-in-out infinite alternate;
+    }
+
+    #rotatePrompt h2 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    #rotatePrompt p {
+      max-width: 320px;
+      line-height: 1.6;
+      color: #dbeafe;
+    }
+
+    @keyframes phoneTilt {
+      from { transform: rotate(-18deg); }
+      to { transform: rotate(18deg); }
+    }
+
+    @media screen and (max-width: 900px) and (orientation: portrait) {
+      #rotatePrompt { display: flex; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #rotatePrompt .phone { animation: none; }
+    }
+
   </style>
 </head>
 <body>
+
+  <div id="rotatePrompt" role="status" aria-live="polite">
+    <div class="phone" aria-hidden="true">📱</div>
+    <h2>Rotate Your Phone</h2>
+    <p>Turn your phone sideways to enjoy Monster Battle Ground.</p>
+    <div aria-hidden="true" style="font-size: 28px;">↻</div>
+  </div>
+
   <iframe id="gamePage" src="../home/index.html" title="Monster Battle Ground"></iframe>
 
   <audio id="persistentMusic"
